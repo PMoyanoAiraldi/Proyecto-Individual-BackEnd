@@ -40,6 +40,30 @@ let ProductsRepository = class ProductsRepository {
     async getProducts() {
         return this.products;
     }
+    getProductById(id) {
+        return this.products.find((product) => product.id === id);
+    }
+    createProduct(createProductDto) {
+        const newProduct = {
+            id: this.products.length + 1,
+            ...createProductDto
+        };
+        this.products.push(newProduct);
+        return newProduct.id;
+    }
+    updateProduct(id, productUpdate) {
+        const product = this.getProductById(id);
+        const updateProduct = {
+            ...product,
+            ...productUpdate,
+        };
+        this.products = this.products.map((product) => (product.id === id ? updateProduct : product));
+        return updateProduct;
+    }
+    removeProduct(id) {
+        this.products = this.products.filter((product) => product.id !== id);
+        return id;
+    }
 };
 exports.ProductsRepository = ProductsRepository;
 exports.ProductsRepository = ProductsRepository = __decorate([

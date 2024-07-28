@@ -11,14 +11,31 @@ const common_1 = require("@nestjs/common");
 const auth_module_1 = require("./auth/auth.module");
 const products_module_1 = require("./products/products.module");
 const users_module_1 = require("./users/users.module");
+const app_service_1 = require("./app.service");
+const app_controller_1 = require("./app.controller");
+const config_1 = require("@nestjs/config");
+const data_source_1 = require("./config/data-source");
+const typeorm_1 = require("@nestjs/typeorm");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
 exports.AppModule = AppModule = __decorate([
     (0, common_1.Module)({
-        imports: [auth_module_1.AuthModule, products_module_1.ProductsModule, users_module_1.UsersModule],
-        controllers: [],
-        providers: [],
+        imports: [
+            config_1.ConfigModule.forRoot({
+                isGlobal: true,
+                load: [data_source_1.postgresDataSourceConfig]
+            }),
+            typeorm_1.TypeOrmModule.forRootAsync({
+                inject: [config_1.ConfigService],
+                useFactory: (configService) => configService.get('postgres')
+            }),
+            auth_module_1.AuthModule,
+            products_module_1.ProductsModule,
+            users_module_1.UsersModule
+        ],
+        controllers: [app_controller_1.AppController],
+        providers: [app_service_1.AppService],
     })
 ], AppModule);
 //# sourceMappingURL=app.module.js.map
