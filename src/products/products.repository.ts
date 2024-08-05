@@ -1,16 +1,23 @@
 import { Injectable } from "@nestjs/common";
 import { createProductDto } from "./dto/create-product.dto";
 import { updateProductDto } from "./dto/update-products.dto";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Product } from "./products.entity";
+import { Repository } from "typeorm";
 
 @Injectable()
 export class ProductsRepository{
+    constructor(
+        @InjectRepository(Product)
+        private readonly productRepo: Repository<Product>
+    ){}
     private products = [
     {
         id: 1,
         name: 'Zapatilla',
         description: 'Zapatillas negras de ecocuero con plataforma',
         price: 44.595,
-        stock: true,
+        stock: 1,
         imgUrl: 'https://reginabags.mitiendanube.com/productos/converse-de-ecocuero/'
     },
     {
@@ -18,7 +25,7 @@ export class ProductsRepository{
         name: 'Bandolera',
         description: 'Bandolera negra con tachas',
         price: 37.960,
-        stock: true,
+        stock: 1,
         imgUrl: 'https://reginabags.mitiendanube.com/productos/bandolera-izzie/'
     },
     {
@@ -26,13 +33,19 @@ export class ProductsRepository{
         name: 'Riñonera',
         description: 'Riñonera con tres cierres delanteros',
         price: 31.300,
-        stock: true,
+        stock: 1,
         imgUrl: 'https://reginabags.mitiendanube.com/productos/rinonera-juana/'
     }
-
-
 ]
 
+async addProducts(products: Product[]): Promise<Product[]> {
+    const existingProducts = await this.productRepo.find();
+    const newProducts = products.filter(
+        (product) => !existingProducts.some((prod) => prod.name === product.name),
+    );
+
+    return this.productRepo.save(newProducts);
+}
 
 async getProducts(){
     return this.products

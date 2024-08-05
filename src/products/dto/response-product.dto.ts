@@ -2,7 +2,7 @@ export class responseProductDto{
     name: string;
     description: string;
     price: number;
-    stock: boolean;
+    stock: number;
     imgUrl: string;
 
     constructor(partial: Partial<responseProductDto>){ //significa que puede venir otras propiedades o menos de las que declaro

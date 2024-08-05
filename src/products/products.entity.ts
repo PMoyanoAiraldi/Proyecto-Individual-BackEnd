@@ -2,21 +2,21 @@ import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, ManyToMany, JoinTabl
 import { Category } from '../categories/categories.entity';
 import { OrderDetail } from '../orderDetail/order-detail.entity';
 
-@Entity()
+@Entity({name: 'products'})
 export class Product {
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
-    @Column({ length: 50 })
+    @Column({ length: 50, nullable: false })
     name: string;
 
-    @Column('text')
+    @Column('text',{nullable: false})
     description: string;
 
-    @Column('decimal', { precision: 10, scale: 2 })
+    @Column('decimal', { precision: 10, scale: 2, nullable: false})
     price: number;
 
-    @Column('int')
+    @Column('int',{nullable: false})
     stock: number;
 
     @Column({ type: 'text', default: 'default-image-url.jpg' })

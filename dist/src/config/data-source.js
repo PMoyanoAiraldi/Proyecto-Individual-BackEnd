@@ -4,7 +4,7 @@ exports.connectionSource = exports.postgresDataSourceConfig = void 0;
 const typeorm_1 = require("typeorm");
 const dotenv = require("dotenv");
 const config_1 = require("@nestjs/config");
-dotenv.config({ path: '.env.development' });
+dotenv.config({ path: '../.env.development' });
 console.log({
     DB_NAME: process.env.DB_NAME,
     DB_HOST: process.env.DB_HOST,
@@ -21,7 +21,7 @@ const PostgresDataSource = {
     password: process.env.DB_PASSWORD,
     synchronize: true,
     logging: false,
-    entities: ['dist/**/*.entity{.ts,.js}'],
+    entities: ['../../dist/**/*.entity{.ts,.js}'],
     migrations: []
 };
 exports.postgresDataSourceConfig = (0, config_1.registerAs)('postgres', () => PostgresDataSource);

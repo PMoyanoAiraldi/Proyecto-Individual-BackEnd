@@ -7,6 +7,9 @@ import { AppController } from './app.controller';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { postgresDataSourceConfig } from './config/data-source';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { CategoriesModule } from './categories/categories.module';
+import { OrderModule } from './orders/orders.module';
+import { OrderDetailModule } from './orderDetail/order-detail.module';
 
 
 @Module({
@@ -22,8 +25,12 @@ import { TypeOrmModule } from '@nestjs/typeorm';
           configService.get('postgres')
       }),
       AuthModule, 
-    ProductsModule,
-    UsersModule],
+      ProductsModule,
+      UsersModule,
+      CategoriesModule,
+      OrderModule,
+      OrderDetailModule
+    ],
   controllers: [AppController],
   providers: [AppService],
 

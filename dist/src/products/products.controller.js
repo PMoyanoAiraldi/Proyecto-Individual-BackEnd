@@ -26,6 +26,9 @@ let ProductsController = class ProductsController {
     getProducts() {
         return this.productsService.getProducts();
     }
+    async seedProducts(products) {
+        return this.productsService.seedProducts(products);
+    }
     createProducts(CreateProductDto) {
         return this.productsService.createProduct(CreateProductDto);
     }
@@ -47,6 +50,13 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
 ], ProductsController.prototype, "getProducts", null);
+__decorate([
+    (0, common_1.Post)('seeder'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Array]),
+    __metadata("design:returntype", Promise)
+], ProductsController.prototype, "seedProducts", null);
 __decorate([
     (0, common_1.Post)(),
     (0, common_1.UseGuards)(auth_guard_1.AuthGuard),

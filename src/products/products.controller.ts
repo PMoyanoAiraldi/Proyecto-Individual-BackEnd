@@ -4,6 +4,7 @@ import { AuthGuard } from "ecommerce-PMoyanoAiraldi/guard/auth/auth.guard";
 import { createProductDto } from "./dto/create-product.dto";
 import { responseProductDto } from "./dto/response-product.dto";
 import { updateProductDto } from "./dto/update-products.dto";
+import { Product } from "./products.entity";
 
 
 @Controller('products') 
@@ -13,6 +14,11 @@ export class ProductsController{
     @Get() 
     getProducts(){ //define el comportamiento
         return this.productsService.getProducts();
+    }
+
+    @Post('seeder')
+    async seedProducts(@Body() products: Product[]){
+        return this.productsService.seedProducts(products)
     }
 
     @Post()

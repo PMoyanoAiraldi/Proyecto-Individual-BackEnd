@@ -2,7 +2,7 @@ export declare class responseProductDto {
     name: string;
     description: string;
     price: number;
-    stock: boolean;
+    stock: number;
     imgUrl: string;
     constructor(partial: Partial<responseProductDto>);
 }

@@ -8,15 +8,15 @@ import { v4 as uuid} from 'uuid'
 })
 export class User {
     @PrimaryGeneratedColumn('uuid')
-    id: string = uuid()
-
-    @Column({length: 50})
+    id: string = uuid
+    
+    @Column({length: 50, nullable: false})
     name: string
 
-    @Column({ length: 50, unique: true })
+    @Column({ length: 50, unique: true, nullable: false })
     email:string
     
-    @Column({ length: 20 })
+    @Column({ length: 20, nullable: false })
     password: string
 
     @Column({ type: 'int', nullable: true })
@@ -25,7 +25,7 @@ export class User {
     @Column({ length: 50, nullable: true })
     country: string;
 
-    @Column({ type: 'text', nullable: true })
+    @Column({ nullable: true })
     address: string;
 
     @Column({ length: 50, nullable: true })

@@ -27,8 +27,8 @@ __decorate([
     __metadata("design:type", Number)
 ], updateProductDto.prototype, "price", void 0);
 __decorate([
-    (0, class_validator_1.IsBoolean)(),
-    __metadata("design:type", Boolean)
+    (0, class_validator_1.IsNumber)(),
+    __metadata("design:type", Number)
 ], updateProductDto.prototype, "stock", void 0);
 __decorate([
     (0, class_validator_1.IsString)(),

@@ -5,7 +5,7 @@ import { registerAs } from "@nestjs/config";
 
 // dotenvConfig({ path: join(__dirname, '..', 'back', 'e-commerce-PMoyanoAiraldi', '.env.development') });
 
-dotenv.config({ path: '.env.development'});
+dotenv.config({ path: '../.env.development'});
 
 console.log({
     DB_NAME: process.env.DB_NAME,
@@ -26,7 +26,7 @@ const PostgresDataSource = {
     password: process.env.DB_PASSWORD,
     synchronize: true,
     logging: false,
-    entities: ['dist/**/*.entity{.ts,.js}'],
+    entities: ['../../dist/**/*.entity{.ts,.js}'],
     migrations:[]
 }
 

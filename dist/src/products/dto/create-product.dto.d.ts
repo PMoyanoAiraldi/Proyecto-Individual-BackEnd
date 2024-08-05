@@ -2,14 +2,15 @@ export declare class createProductDto {
     name: string;
     description: string;
     price: number;
-    stock: boolean;
+    stock: number;
     imgUrl: string;
+    category: string;
 }
-export interface Product {
+export interface IProduct {
     id: number;
     name: string;
     description: string;
     price: number;
-    stock: boolean;
+    stock: number;
     imgUrl: string;
 }
