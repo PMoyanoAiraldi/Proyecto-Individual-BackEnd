@@ -11,32 +11,33 @@ export class ProductsRepository{
         @InjectRepository(Product)
         private readonly productRepo: Repository<Product>
     ){}
-    private products = [
-    {
-        id: 1,
-        name: 'Zapatilla',
-        description: 'Zapatillas negras de ecocuero con plataforma',
-        price: 44.595,
-        stock: 1,
-        imgUrl: 'https://reginabags.mitiendanube.com/productos/converse-de-ecocuero/'
-    },
-    {
-        id: 2,
-        name: 'Bandolera',
-        description: 'Bandolera negra con tachas',
-        price: 37.960,
-        stock: 1,
-        imgUrl: 'https://reginabags.mitiendanube.com/productos/bandolera-izzie/'
-    },
-    {
-        id: 3,
-        name: 'Riñonera',
-        description: 'Riñonera con tres cierres delanteros',
-        price: 31.300,
-        stock: 1,
-        imgUrl: 'https://reginabags.mitiendanube.com/productos/rinonera-juana/'
-    }
-]
+
+//     private products = [
+//     {
+//         id: 1,
+//         name: 'Zapatilla',
+//         description: 'Zapatillas negras de ecocuero con plataforma',
+//         price: 44.595,
+//         stock: 1,
+//         imgUrl: 'https://reginabags.mitiendanube.com/productos/converse-de-ecocuero/'
+//     },
+//     {
+//         id: 2,
+//         name: 'Bandolera',
+//         description: 'Bandolera negra con tachas',
+//         price: 37.960,
+//         stock: 1,
+//         imgUrl: 'https://reginabags.mitiendanube.com/productos/bandolera-izzie/'
+//     },
+//     {
+//         id: 3,
+//         name: 'Riñonera',
+//         description: 'Riñonera con tres cierres delanteros',
+//         price: 31.300,
+//         stock: 1,
+//         imgUrl: 'https://reginabags.mitiendanube.com/productos/rinonera-juana/'
+//     }
+// ]
 
 async addProducts(products: Product[]): Promise<Product[]> {
     const existingProducts = await this.productRepo.find();
@@ -47,36 +48,45 @@ async addProducts(products: Product[]): Promise<Product[]> {
     return this.productRepo.save(newProducts);
 }
 
-async getProducts(){
-    return this.products
+async getProducts(): Promise<Product[]>{
+    return this.productRepo.find()
 }
 
-getProductById(id: number){
-    return this.products.find((product) => product.id === id)
+async getProductById(id: string): Promise<Product>{
+    return this.productRepo.findOne({where: {id}})
 }
 
-createProduct(createProductDto: createProductDto){
-    const newProduct = {
-        id : this.products.length + 1,
-        ...createProductDto
-    } 
-    this.products.push(newProduct)
-    return newProduct.id;
+async getProductByName(name: string): Promise<Product> {
+    return this.productRepo.findOne({ where: { name } });
+}
+
+async createProduct(createProductDto: createProductDto): Promise<Product>{
+    // const newProduct = {
+    //     id : this.products.length + 1,
+    //     ...createProductDto
+    // } 
+    // this.products.push(newProduct)
+    // return newProduct.id;
+    const newProduct = this.productRepo.create(createProductDto);
+    return this.productRepo.save(newProduct);
 }
 
 
-updateProduct(id: number, productUpdate: updateProductDto){
-    const product = this.getProductById(id);
-    const updateProduct = {
-        ...product,
-        ...productUpdate,
-    };
-    this.products = this.products.map((product) => (product.id === id ? updateProduct : product))
-    return updateProduct;
+async updateProduct(id: number, productUpdate: updateProductDto): Promise<Product>{
+    // const product = this.getProductById(id);
+    // const updateProduct = {
+    //     ...product,
+    //     ...productUpdate,
+    // };
+    // this.products = this.products.map((product) => (product.id === id ? updateProduct : product))
+    // return updateProduct;
+    await this.productRepo.update(id, productUpdate)
+    return this.getProductById(id)
 }
 
-removeProduct(id: number){
-    this.products = this.products.filter((product) => product.id !== id);
-    return id
+async removeProduct(id: number): Promise<void>{
+    await this.productRepo.delete(id)
+    // this.products = this.products.filter((product) => product.id !== id);
+    // return id
 }
 }

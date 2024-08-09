@@ -12,44 +12,50 @@ export class ProductsService{
         private categoriesRepository: CategoriesRepository
     ){}
 
-    getProducts(){
+    async getProducts(){
         return this.productsRepository.getProducts()
     }
 
-    getProduct(id: number){
+    async getProduct(id: string): Promise<Product>{
         return this.productsRepository.getProductById(id)
     }
 
-    createProduct(createProductDto: createProductDto){
+    async createProduct(createProductDto: createProductDto){
         return this.productsRepository.createProduct(createProductDto)
     }
 
     async seedProducts(products: Product[]) {
         const categories = await this.categoriesRepository.getCategories();
-        const newProducts = products.map(productData => {
+        const newProducts = [];
+
+        for (const productData of products) {
             const category = categories.find(cat => cat.name === productData.category.name);
             if (!category) {
                 throw new Error(`Category '${productData.category.name}' not found`);
             }
-            const product = new Product();
-            product.name = productData.name;
-            product.description = productData.description;
-            product.price = productData.price;
-            product.stock = productData.stock;
-            product.imgUrl = productData.imgUrl || 'default-image-url.png';
-            product.category = category;
-            return product;
-        });
-    
-            await this.productsRepository.addProducts(newProducts);
+
+            const exists = await this.productsRepository.getProductByName(productData.name);
+            if (!exists) {
+                const product = new Product();
+                product.name = productData.name;
+                product.description = productData.description;
+                product.price = productData.price;
+                product.stock = productData.stock;
+                product.imgUrl = productData.imgUrl || 'default-image-url.png';
+                product.category = category;
+                newProducts.push(product);
+            }
         }
     
+        await this.productsRepository.addProducts(newProducts);
+    }
+    
 
-    updateProduct(id: number, updateProductDto: updateProductDto){
+    async updateProduct(id: number, updateProductDto: updateProductDto): Promise<Product>{
         return this.productsRepository.updateProduct(id, updateProductDto)
     }
 
-    removeProduct(id: number){
+    async removeProduct(id: number): Promise<void>{
         return this.productsRepository.removeProduct(id)
     }
 }

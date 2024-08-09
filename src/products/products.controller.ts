@@ -30,9 +30,9 @@ export class ProductsController{
 
     @Get(':id')
     @HttpCode(HttpStatus.OK)
-    getProduct(@Param('id') id: string){
-        const product = this.productsService.getProduct(Number(id))
-        return new responseProductDto(product)
+    async getProduct(@Param('id') id: string) : Promise<responseProductDto>{
+        const product = await this.productsService.getProduct((id))
+        return product
     }
 
     @Put('id')
