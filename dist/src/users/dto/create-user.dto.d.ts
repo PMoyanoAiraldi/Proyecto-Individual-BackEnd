@@ -1,19 +1,19 @@
-export declare class createUserDto {
+export declare class CreateUserDto {
     name: string;
     email: string;
     password: string;
     address: string;
-    phone: string;
+    phone: number;
     country?: string;
     city?: string;
 }
 export interface User {
-    id: number;
+    id: string;
     name: string;
     email: string;
     password: string;
     address: string;
-    phone: string;
+    phone: number;
     country?: string;
     city?: string;
 }

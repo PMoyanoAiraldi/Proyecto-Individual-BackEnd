@@ -4,7 +4,8 @@ import { CategorySeeder } from "./categories.seeder";
 
 @Controller('categories')
 export class CategoriesController{
-    constructor(private readonly categoriesService: CategoriesService,
+    constructor(
+        private readonly categoriesService: CategoriesService,
         private readonly categoriesSeeder: CategorySeeder
     ){}
 

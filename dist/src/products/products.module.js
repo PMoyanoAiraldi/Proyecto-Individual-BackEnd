@@ -23,8 +23,9 @@ exports.ProductsModule = ProductsModule;
 exports.ProductsModule = ProductsModule = __decorate([
     (0, common_1.Module)({
         imports: [typeorm_1.TypeOrmModule.forFeature([products_entity_1.Product, categories_entity_1.Category]), categories_module_1.CategoriesModule],
-        providers: [products_service_1.ProductsService, products_repository_1.ProductsRepository, categories_repository_1.CategoriesRepository, categories_seeder_1.CategorySeeder],
+        providers: [products_service_1.ProductsService, products_repository_1.ProductRepository, categories_repository_1.CategoriesRepository, categories_seeder_1.CategorySeeder],
         controllers: [products_controller_1.ProductsController],
+        exports: [products_service_1.ProductsService]
     })
 ], ProductsModule);
 //# sourceMappingURL=products.module.js.map

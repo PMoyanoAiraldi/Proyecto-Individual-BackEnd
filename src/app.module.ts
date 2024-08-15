@@ -29,12 +29,10 @@ import { OrderDetailModule } from './orderDetail/order-detail.module';
       UsersModule,
       CategoriesModule,
       OrderModule,
-      OrderDetailModule
+      OrderDetailModule,
     ],
   controllers: [AppController],
   providers: [AppService],
-
-
   
 })
 

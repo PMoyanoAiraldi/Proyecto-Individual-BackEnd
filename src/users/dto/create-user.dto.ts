@@ -1,7 +1,7 @@
-import { IsEmail, IsOptional, IsString, Matches } from "class-validator";
+import { IsEmail, IsNumber, IsOptional, IsString, Matches } from "class-validator";
 
 
-export class createUserDto {
+export class CreateUserDto {
     @IsString()
     name: string;
 
@@ -20,8 +20,8 @@ export class createUserDto {
     @IsString()
     address: string;
 
-    @IsString()
-    phone: string;
+    @IsNumber()
+    phone: number;
 
     @IsString()
     @IsOptional()
@@ -33,12 +33,12 @@ export class createUserDto {
 }
 
 export interface User {
-    id: number;
+    id: string;
     name: string;
     email: string;
     password: string;
     address: string;
-    phone: string;
+    phone: number;
     country?: string;
     city?: string;
 }

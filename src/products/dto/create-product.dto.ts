@@ -1,6 +1,6 @@
-import { IsNumber, IsString } from "class-validator";
+import { IsNumber, IsString, IsUUID } from "class-validator";
 
-export class createProductDto {
+export class CreateProductDto {
         @IsString()
         name: string;
 
@@ -16,8 +16,8 @@ export class createProductDto {
         @IsString()
         imgUrl: string;
 
-        @IsString()
-        category: string;
+        @IsUUID()
+        categoryId: string;
 }
 
 export interface IProduct {

@@ -1,79 +1,48 @@
 import { Injectable } from "@nestjs/common";
-import { createUserDto, User } from "./dto/create-user.dto";
+import { CreateUserDto } from "./dto/create-user.dto";
 import { updateUserDto } from "./dto/update-user.dto";
+import { InjectRepository } from "@nestjs/typeorm";
+import { User } from "./users.entity";
+import { Repository } from "typeorm";
 
-@Injectable()
-export class UsersRepository{
-    private users: User[] = [{
-        id: 1, 
-        name: 'Paula',
-        email: 'pmoyano@gmail.com',
-        password: 'password1',
-        address: 'Rivadavia S/N',
-        phone: '14525587',
-        country:'Argentina',
-        city: 'López'
-    },
-    {
-        id: 1, 
-        name: 'Florencia',
-        email: 'flori9809@gmail.com',
-        password: 'password2',
-        address: 'Rivadavia S/N',
-        phone: '5454412',
-        country:'Argentina',
-        city: 'López'
-    },
-    {
-        id: 3, 
-        name: 'Facundo',
-        email: 'facu@gmail.com',
-        password: 'password3',
-        address: 'Rivadavia S/N',
-        phone: '36557822',
-        country:'Argentina',
-        city: 'López'
-    }
 
-        
-    ];
-
+export class UsersRepository extends Repository<User> {
     
-
-    getUsers(){//no es asincrono todavia porque usamos el array
-        return this.users
+    async getUsers(): Promise<User[]> {
+        return this.find(); 
     }
 
-    getUserById(id: number){
-        return this.users.find((user) => user.id === id)
+    async getUserById(id: string): Promise<User | undefined>{
+        return this.findOne({ where: {id}})
     }
 
-    createUser(createUserDto: createUserDto){
-        const newUser = {
-            id : this.users.length + 1,
-            ...createUserDto
-        } 
-        this.users.push(newUser)
-        return newUser.id;
+    async createUser(createUserDto: CreateUserDto): Promise <User>{
+        const newUser = this.create(createUserDto) // Crea una instancia del usuario con los datos del DTO
+        await this.save(newUser);//Guarda el nuevo usuario en la BD
+        return newUser;
     }
 
-    findOneEmail(email: string){
-        return this.users.find((user) => user.email === email)
+    async findOneEmail(email: string){
+        return this.findOne({where: {email}})
     }
 
 
-    updateUsers(id: number, userUpdate: updateUserDto){
-        const user = this.getUserById(id);
-        const updateUser = {
-            ...user,
-            ...userUpdate,
-        };
-        this.users = this.users.map((user) => (user.id === id ? updateUser : user))
-        return updateUser;
+    async updateUsers(id: string, userUpdate: updateUserDto): Promise <User>{
+        const user = await this.findOne({ where: {id}});
+        if(!user){
+            throw new Error(`El usuario con ${id} no fue encontrado`);
+        }
+        Object.assign(user, userUpdate);// Actualiza las propiedades del usuario con los datos del DTO
+        await this.save(user)
+        return user;
     }
 
-    removeUsers(id: number){
-        this.users = this.users.filter((user) => user.id !== id);
-        return id
+    async removeUsers(id: string): Promise <string>{
+        const user = await this.findOne({ where: {id}});
+        if(!user){
+            throw new Error(`El usuario con ${id} no fue encontrado`);
+        }
+        await this.remove(user);
+        return id;
     }
 }

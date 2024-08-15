@@ -12,14 +12,16 @@ const order_detail_service_1 = require("./order-detail.service");
 const order_detail_controller_1 = require("./order-detail.controller");
 const typeorm_1 = require("@nestjs/typeorm");
 const order_detail_entity_1 = require("./order-detail.entity");
+const order_detail_repository_1 = require("./order-detail.repository");
 let OrderDetailModule = class OrderDetailModule {
 };
 exports.OrderDetailModule = OrderDetailModule;
 exports.OrderDetailModule = OrderDetailModule = __decorate([
     (0, common_1.Module)({
-        imports: [typeorm_1.TypeOrmModule.forFeature([order_detail_entity_1.OrderDetail])],
+        imports: [typeorm_1.TypeOrmModule.forFeature([order_detail_entity_1.OrderDetail, order_detail_repository_1.OrderDetailRepository])],
         providers: [order_detail_service_1.OrderDetailService],
         controllers: [order_detail_controller_1.OrderDetailController],
+        exports: [order_detail_service_1.OrderDetailService]
     })
 ], OrderDetailModule);
 //# sourceMappingURL=order-detail.module.js.map

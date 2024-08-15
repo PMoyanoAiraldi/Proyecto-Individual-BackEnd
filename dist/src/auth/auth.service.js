@@ -16,12 +16,17 @@ let AuthService = class AuthService {
     constructor(userService) {
         this.userService = userService;
     }
-    signIn(credentials) {
-        const user = this.userService.findOneByEmail(credentials.email);
-        if (user && user.password === credentials.password) {
-            return "Has inciado sesión correctamente";
+    async signIn(credentials) {
+        try {
+            const user = await this.userService.findOneByEmail(credentials.email);
+            if (user && user.password === credentials.password) {
+                return "Has inciado sesión correctamente";
+            }
+            return "Email o contraseña incorrectos. Por favor intenta nuevamente";
         }
-        return "Email o contraseña incorrectos. Por favor intenta nuevamente";
+        catch (error) {
+            return "Error al iniciar sesión. Por favor intenta nuevamente";
+        }
     }
     getAuth() {
         return 'Get all auth';

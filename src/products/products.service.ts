@@ -1,27 +1,37 @@
 import { Injectable } from "@nestjs/common";
-import { ProductsRepository } from "./products.repository";
-import { createProductDto } from "./dto/create-product.dto";
+import { ProductRepository } from "./products.repository";
+import { CreateProductDto } from "./dto/create-product.dto";
 import { updateProductDto } from "./dto/update-products.dto";
 import { CategoriesRepository } from "../categories/categories.repository";
 import { Product } from "./products.entity";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
 
 @Injectable()
 export class ProductsService{
     
-    constructor (private productsRepository: ProductsRepository,
+    constructor (
+        @InjectRepository(ProductRepository)
+        private productsRepository: ProductRepository,
+
+        @InjectRepository(CategoriesRepository)
         private categoriesRepository: CategoriesRepository
     ){}
 
-    async getProducts(){
+    async getProducts(): Promise<Product[]>{
         return this.productsRepository.getProducts()
     }
 
     async getProduct(id: string): Promise<Product>{
-        return this.productsRepository.getProductById(id)
+        return await this.productsRepository.getProductById(id)
     }
 
-    async createProduct(createProductDto: createProductDto){
-        return this.productsRepository.createProduct(createProductDto)
+    async createProduct(createProductDto: CreateProductDto): Promise<Product>{
+        const category = await this.categoriesRepository.findOneBy({id: createProductDto.categoryId})
+        if(!category){
+            throw Error ('La categoria no fue encontrada')
+        }
+        return this.productsRepository.createProduct(createProductDto, category)
     }
 
     async seedProducts(products: Product[]) {
@@ -50,12 +60,30 @@ export class ProductsService{
         await this.productsRepository.addProducts(newProducts);
     }
     
+    async findAll(page: number, limit: number){
+        return await this.productsRepository.find({
+            take: limit,
+            skip: (page - 1) * limit
+        });
+    }
 
-    async updateProduct(id: number, updateProductDto: updateProductDto): Promise<Product>{
+    async updateProduct(id: string, updateProductDto: updateProductDto): Promise<Product>{
         return this.productsRepository.updateProduct(id, updateProductDto)
     }
 
-    async removeProduct(id: number): Promise<void>{
+    async removeProduct(id: string): Promise<{id: string}>{
         return this.productsRepository.removeProduct(id)
+    }
+
+    async buyProduct(id: string) {
+        const product =  await this.productsRepository.getProductById(id);
+        if(product.stock === 0){
+            throw new Error ("Stock agotado")
+        }
+        await this.productsRepository.update(id, {
+            stock: product.stock - 1,
+        });
+        console.log("Producto comprado exitosamente")
+        return product.price;
     }
 }

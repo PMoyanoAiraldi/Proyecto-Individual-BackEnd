@@ -46,7 +46,6 @@ __decorate([
 ], Product.prototype, "category", void 0);
 __decorate([
     (0, typeorm_1.ManyToMany)(() => order_detail_entity_1.OrderDetail, orderDetail => orderDetail.products),
-    (0, typeorm_1.JoinTable)(),
     __metadata("design:type", Array)
 ], Product.prototype, "orderDetails", void 0);
 exports.Product = Product = __decorate([

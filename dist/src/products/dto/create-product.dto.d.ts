@@ -1,10 +1,10 @@
-export declare class createProductDto {
+export declare class CreateProductDto {
     name: string;
     description: string;
     price: number;
     stock: number;
     imgUrl: string;
-    category: string;
+    categoryId: string;
 }
 export interface IProduct {
     id: number;

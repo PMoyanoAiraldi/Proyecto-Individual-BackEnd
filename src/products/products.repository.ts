@@ -1,78 +1,47 @@
 import { Injectable } from "@nestjs/common";
-import { createProductDto } from "./dto/create-product.dto";
+import { CreateProductDto } from "./dto/create-product.dto";
 import { updateProductDto } from "./dto/update-products.dto";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Product } from "./products.entity";
 import { Repository } from "typeorm";
+import { Category } from "../categories/categories.entity";
 
 @Injectable()
-export class ProductsRepository{
-    constructor(
-        @InjectRepository(Product)
-        private readonly productRepo: Repository<Product>
-    ){}
+export class ProductRepository extends Repository<Product> {
 
-//     private products = [
-//     {
-//         id: 1,
-//         name: 'Zapatilla',
-//         description: 'Zapatillas negras de ecocuero con plataforma',
-//         price: 44.595,
-//         stock: 1,
-//         imgUrl: 'https://reginabags.mitiendanube.com/productos/converse-de-ecocuero/'
-//     },
-//     {
-//         id: 2,
-//         name: 'Bandolera',
-//         description: 'Bandolera negra con tachas',
-//         price: 37.960,
-//         stock: 1,
-//         imgUrl: 'https://reginabags.mitiendanube.com/productos/bandolera-izzie/'
-//     },
-//     {
-//         id: 3,
-//         name: 'Riñonera',
-//         description: 'Riñonera con tres cierres delanteros',
-//         price: 31.300,
-//         stock: 1,
-//         imgUrl: 'https://reginabags.mitiendanube.com/productos/rinonera-juana/'
-//     }
-// ]
 
 async addProducts(products: Product[]): Promise<Product[]> {
-    const existingProducts = await this.productRepo.find();
-    const newProducts = products.filter(
-        (product) => !existingProducts.some((prod) => prod.name === product.name),
+    const existingProducts = await this.find();//encuentra los productos existentes en la BD
+    const newProducts = products.filter( 
+        (product) => !existingProducts.some((prod) => prod.name === product.name),//filtra los productos que no estan en la BD
     );
 
-    return this.productRepo.save(newProducts);
+    return this.save(newProducts);//guarda los nuevos productos
 }
 
 async getProducts(): Promise<Product[]>{
-    return this.productRepo.find()
+    return this.find()
 }
 
 async getProductById(id: string): Promise<Product>{
-    return this.productRepo.findOne({where: {id}})
+    return this.findOne({where: {id}})
 }
 
 async getProductByName(name: string): Promise<Product> {
-    return this.productRepo.findOne({ where: { name } });
+    return this.findOne({ where: { name } });
 }
 
-async createProduct(createProductDto: createProductDto): Promise<Product>{
-    // const newProduct = {
-    //     id : this.products.length + 1,
-    //     ...createProductDto
-    // } 
-    // this.products.push(newProduct)
-    // return newProduct.id;
-    const newProduct = this.productRepo.create(createProductDto);
-    return this.productRepo.save(newProduct);
+async createProduct(createProductDto: CreateProductDto, category: Category): Promise<Product>{
+    const newProduct = this.create({
+        ...createProductDto,
+        category //asociamos la categoria con el producto
+    });
+    await this.save(newProduct);
+    return newProduct
 }
 
 
-async updateProduct(id: number, productUpdate: updateProductDto): Promise<Product>{
+async updateProduct(id: string, productUpdate: updateProductDto): Promise<Product>{
     // const product = this.getProductById(id);
     // const updateProduct = {
     //     ...product,
@@ -80,13 +49,15 @@ async updateProduct(id: number, productUpdate: updateProductDto): Promise<Produc
     // };
     // this.products = this.products.map((product) => (product.id === id ? updateProduct : product))
     // return updateProduct;
-    await this.productRepo.update(id, productUpdate)
-    return this.getProductById(id)
+    await this.update(id, productUpdate)
+    return this.findOneBy({id})
 }
 
-async removeProduct(id: number): Promise<void>{
-    await this.productRepo.delete(id)
+async removeProduct(id: string): Promise<{id:string}>{
+    await this.delete(id)
+    return {id}
     // this.products = this.products.filter((product) => product.id !== id);
     // return id
 }
 }
+

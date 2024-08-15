@@ -4,5 +4,4 @@ export declare class responseProductDto {
     price: number;
     stock: number;
     imgUrl: string;
-    constructor(partial: Partial<responseProductDto>);
 }

@@ -45,9 +45,9 @@ let ProductSeeder = class ProductSeeder {
 exports.ProductSeeder = ProductSeeder;
 exports.ProductSeeder = ProductSeeder = __decorate([
     (0, common_1.Injectable)(),
-    __param(0, (0, typeorm_1.InjectRepository)(products_repository_1.ProductsRepository)),
+    __param(0, (0, typeorm_1.InjectRepository)(products_repository_1.ProductRepository)),
     __param(1, (0, typeorm_1.InjectRepository)(categories_repository_1.CategoriesRepository)),
-    __metadata("design:paramtypes", [products_repository_1.ProductsRepository,
+    __metadata("design:paramtypes", [products_repository_1.ProductRepository,
         categories_repository_1.CategoriesRepository])
 ], ProductSeeder);
 //# sourceMappingURL=products.seeder.js.map

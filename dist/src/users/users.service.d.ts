@@ -1,22 +1,14 @@
-import { UsersRepository } from "./users.repository";
-import { createUserDto } from "./dto/create-user.dto";
+import { CreateUserDto } from "./dto/create-user.dto";
 import { updateUserDto } from "./dto/update-user.dto";
+import { User } from "./users.entity";
+import { UsersRepository } from "./users.repository";
 export declare class UsersService {
-    private usersRepository;
+    private readonly usersRepository;
     constructor(usersRepository: UsersRepository);
-    getUsers(): import("./dto/create-user.dto").User[];
-    getUser(id: number): import("./dto/create-user.dto").User;
-    createUser(createUserDto: createUserDto): number;
-    updateUsers(id: number, updateUserDto: updateUserDto): {
-        name: string;
-        email: string;
-        password: string;
-        address: string;
-        phone: string;
-        country?: string;
-        city?: string;
-        id: number;
-    };
-    removeUsers(id: number): number;
-    findOneByEmail(email: string): import("./dto/create-user.dto").User;
+    getUsers(): Promise<User[]>;
+    getUserById(id: string): Promise<User>;
+    createUser(createUserDto: CreateUserDto): Promise<User>;
+    findOneByEmail(email: string): Promise<User>;
+    updateUsers(id: string, updateUserDto: updateUserDto): Promise<User>;
+    removeUsers(id: string): Promise<string>;
 }

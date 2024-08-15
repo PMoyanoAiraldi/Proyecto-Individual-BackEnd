@@ -26,6 +26,6 @@ export class Product {
     category: Category;
 
     @ManyToMany(() => OrderDetail, orderDetail => orderDetail.products)
-    @JoinTable()
+    
     orderDetails: OrderDetail[];
 }

@@ -8,55 +8,86 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ProductsService = void 0;
 const common_1 = require("@nestjs/common");
 const products_repository_1 = require("./products.repository");
 const categories_repository_1 = require("../categories/categories.repository");
 const products_entity_1 = require("./products.entity");
+const typeorm_1 = require("@nestjs/typeorm");
 let ProductsService = class ProductsService {
     constructor(productsRepository, categoriesRepository) {
         this.productsRepository = productsRepository;
         this.categoriesRepository = categoriesRepository;
     }
-    getProducts() {
+    async getProducts() {
         return this.productsRepository.getProducts();
     }
-    getProduct(id) {
-        return this.productsRepository.getProductById(id);
+    async getProduct(id) {
+        return await this.productsRepository.getProductById(id);
     }
-    createProduct(createProductDto) {
-        return this.productsRepository.createProduct(createProductDto);
+    async createProduct(createProductDto) {
+        const category = await this.categoriesRepository.findOneBy({ id: createProductDto.categoryId });
+        if (!category) {
+            throw Error('La categoria no fue encontrada');
+        }
+        return this.productsRepository.createProduct(createProductDto, category);
     }
     async seedProducts(products) {
         const categories = await this.categoriesRepository.getCategories();
-        const newProducts = products.map(productData => {
+        const newProducts = [];
+        for (const productData of products) {
             const category = categories.find(cat => cat.name === productData.category.name);
             if (!category) {
                 throw new Error(`Category '${productData.category.name}' not found`);
             }
-            const product = new products_entity_1.Product();
-            product.name = productData.name;
-            product.description = productData.description;
-            product.price = productData.price;
-            product.stock = productData.stock;
-            product.imgUrl = productData.imgUrl || 'default-image-url.png';
-            product.category = category;
-            return product;
-        });
+            const exists = await this.productsRepository.getProductByName(productData.name);
+            if (!exists) {
+                const product = new products_entity_1.Product();
+                product.name = productData.name;
+                product.description = productData.description;
+                product.price = productData.price;
+                product.stock = productData.stock;
+                product.imgUrl = productData.imgUrl || 'default-image-url.png';
+                product.category = category;
+                newProducts.push(product);
+            }
+        }
         await this.productsRepository.addProducts(newProducts);
     }
-    updateProduct(id, updateProductDto) {
+    async findAll(page, limit) {
+        return await this.productsRepository.find({
+            take: limit,
+            skip: (page - 1) * limit
+        });
+    }
+    async updateProduct(id, updateProductDto) {
         return this.productsRepository.updateProduct(id, updateProductDto);
     }
-    removeProduct(id) {
+    async removeProduct(id) {
         return this.productsRepository.removeProduct(id);
+    }
+    async buyProduct(id) {
+        const product = await this.productsRepository.getProductById(id);
+        if (product.stock === 0) {
+            throw new Error("Stock agotado");
+        }
+        await this.productsRepository.update(id, {
+            stock: product.stock - 1,
+        });
+        console.log("Producto comprado exitosamente");
+        return product.price;
     }
 };
 exports.ProductsService = ProductsService;
 exports.ProductsService = ProductsService = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [products_repository_1.ProductsRepository,
+    __param(0, (0, typeorm_1.InjectRepository)(products_repository_1.ProductRepository)),
+    __param(1, (0, typeorm_1.InjectRepository)(categories_repository_1.CategoriesRepository)),
+    __metadata("design:paramtypes", [products_repository_1.ProductRepository,
         categories_repository_1.CategoriesRepository])
 ], ProductsService);
 //# sourceMappingURL=products.service.js.map

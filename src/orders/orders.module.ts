@@ -9,14 +9,20 @@ import { User } from "../users/users.entity";
 import { UsersModule } from "../users/users.module";
 import { ProductsModule } from "../products/products.module";
 import { OrderDetailModule } from "../orderDetail/order-detail.module";
+import { OrderDetailRepository } from "../orderDetail/order-detail.repository";
+import { OrderRepository } from "./orders.repository";
+import { UsersService } from "../users/users.service";
+import { ProductsService } from "../products/products.service";
+import { ProductRepository } from "../products/products.repository";
+import { CategoriesRepository } from "../categories/categories.repository";
 
 
 @Module({
-    imports: [TypeOrmModule.forFeature([Order, OrderDetail, User, Product]),
+    imports: [TypeOrmModule.forFeature([Order, OrderDetail,OrderRepository, User, Product]),
     UsersModule,
     ProductsModule, 
     OrderDetailModule],
-    providers: [OrderService],
+    providers: [OrderService, UsersService, ProductsService, ProductRepository, CategoriesRepository],
     controllers: [OrderController],
 })
 export class OrderModule {}

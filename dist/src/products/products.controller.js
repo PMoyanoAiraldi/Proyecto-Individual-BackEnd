@@ -17,7 +17,6 @@ const common_1 = require("@nestjs/common");
 const products_service_1 = require("./products.service");
 const auth_guard_1 = require("../../guard/auth/auth.guard");
 const create_product_dto_1 = require("./dto/create-product.dto");
-const response_product_dto_1 = require("./dto/response-product.dto");
 const update_products_dto_1 = require("./dto/update-products.dto");
 let ProductsController = class ProductsController {
     constructor(productsService) {
@@ -32,15 +31,15 @@ let ProductsController = class ProductsController {
     createProducts(CreateProductDto) {
         return this.productsService.createProduct(CreateProductDto);
     }
-    getProduct(id) {
-        const product = this.productsService.getProduct(Number(id));
-        return new response_product_dto_1.responseProductDto(product);
+    async getProduct(id) {
+        const product = await this.productsService.getProduct((id));
+        return product;
     }
     updateProducts(id, updateProduct) {
-        return this.productsService.updateProduct(+id, updateProduct);
+        return this.productsService.updateProduct(id, updateProduct);
     }
     deleteProducts(id) {
-        return this.productsService.removeProduct(+id);
+        return this.productsService.removeProduct(id);
     }
 };
 exports.ProductsController = ProductsController;
@@ -63,7 +62,7 @@ __decorate([
     (0, common_1.HttpCode)(common_1.HttpStatus.CREATED),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [create_product_dto_1.createProductDto]),
+    __metadata("design:paramtypes", [create_product_dto_1.CreateProductDto]),
     __metadata("design:returntype", void 0)
 ], ProductsController.prototype, "createProducts", null);
 __decorate([
@@ -72,7 +71,7 @@ __decorate([
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:returntype", Promise)
 ], ProductsController.prototype, "getProduct", null);
 __decorate([
     (0, common_1.Put)('id'),

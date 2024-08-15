@@ -1,25 +1,30 @@
-import { Injectable } from "@nestjs/common";
-import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { Category } from "./categories.entity";
 
-@Injectable()
-export class CategoriesRepository{
-    constructor(
-        @InjectRepository(Category)        
-        private readonly categoryRepo: Repository<Category>
-    ){}
 
-
+export class CategoriesRepository extends Repository<Category>{
+    
     async addCategories(categories: { name: string }[]): Promise<Category[]> {
         const existingCategories = await this.getCategories();
-        const newCategories = categories.filter(
-            (category) => !existingCategories.some((cat) => cat.name === category.name)
-        )
-        return this.categoryRepo.save(newCategories);
+        const existingCategoryNames = new Set(existingCategories.map(cat => cat.name)); //verifica los nombres existentes con Set
+
+        // Convertimos los datos en instancias de Category y filtramos los duplicados
+        const newCategories = categories
+        .filter(category => !existingCategoryNames.has(category.name))
+        .map(category => {
+            const newCategory = new Category();
+            newCategory.name = category.name;
+            return newCategory;
+        });
+
+        return this.save(newCategories);
     }
 
     async getCategories(): Promise<Category[]> {
-        return this.categoryRepo.find()
+        return this.find()
+    }
+
+    async findOneById(id: string): Promise<Category | undefined>{
+        return this.findOne({where: {id}})
     }
 }

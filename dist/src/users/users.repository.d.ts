@@ -1,20 +1,12 @@
-import { createUserDto, User } from "./dto/create-user.dto";
+import { CreateUserDto } from "./dto/create-user.dto";
 import { updateUserDto } from "./dto/update-user.dto";
-export declare class UsersRepository {
-    private users;
-    getUsers(): User[];
-    getUserById(id: number): User;
-    createUser(createUserDto: createUserDto): number;
-    findOneEmail(email: string): User;
-    updateUsers(id: number, userUpdate: updateUserDto): {
-        name: string;
-        email: string;
-        password: string;
-        address: string;
-        phone: string;
-        country?: string;
-        city?: string;
-        id: number;
-    };
-    removeUsers(id: number): number;
+import { User } from "./users.entity";
+import { Repository } from "typeorm";
+export declare class UsersRepository extends Repository<User> {
+    getUsers(): Promise<User[]>;
+    getUserById(id: string): Promise<User | undefined>;
+    createUser(createUserDto: CreateUserDto): Promise<User>;
+    findOneEmail(email: string): Promise<User>;
+    updateUsers(id: string, userUpdate: updateUserDto): Promise<User>;
+    removeUsers(id: string): Promise<string>;
 }

@@ -1,36 +1,16 @@
-import { createProductDto } from "./dto/create-product.dto";
+import { CreateProductDto } from "./dto/create-product.dto";
 import { updateProductDto } from "./dto/update-products.dto";
 import { Product } from "./products.entity";
 import { Repository } from "typeorm";
-export declare class ProductsRepository {
-    private readonly productRepo;
-    constructor(productRepo: Repository<Product>);
-    private products;
+import { Category } from "../categories/categories.entity";
+export declare class ProductRepository extends Repository<Product> {
     addProducts(products: Product[]): Promise<Product[]>;
-    getProducts(): Promise<{
-        id: number;
-        name: string;
-        description: string;
-        price: number;
-        stock: number;
-        imgUrl: string;
-    }[]>;
-    getProductById(id: number): {
-        id: number;
-        name: string;
-        description: string;
-        price: number;
-        stock: number;
-        imgUrl: string;
-    };
-    createProduct(createProductDto: createProductDto): number;
-    updateProduct(id: number, productUpdate: updateProductDto): {
-        name: string;
-        description: string;
-        price: number;
-        stock: number;
-        imgUrl: string;
-        id: number;
-    };
-    removeProduct(id: number): number;
+    getProducts(): Promise<Product[]>;
+    getProductById(id: string): Promise<Product>;
+    getProductByName(name: string): Promise<Product>;
+    createProduct(createProductDto: CreateProductDto, category: Category): Promise<Product>;
+    updateProduct(id: string, productUpdate: updateProductDto): Promise<Product>;
+    removeProduct(id: string): Promise<{
+        id: string;
+    }>;
 }

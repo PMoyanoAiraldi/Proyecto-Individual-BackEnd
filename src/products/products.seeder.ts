@@ -1,7 +1,7 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ProductsRepository } from './products.repository';
+import { ProductRepository } from './products.repository';
 import { CategoriesRepository } from '../categories/categories.repository';
 import { productData } from './products.data';
 import { Product } from './products.entity';
@@ -9,8 +9,8 @@ import { Product } from './products.entity';
 @Injectable()
 export class ProductSeeder {
     constructor(
-        @InjectRepository(ProductsRepository)
-        private readonly productRepository: ProductsRepository,
+        @InjectRepository(ProductRepository)
+        private readonly productRepository: ProductRepository,
         @InjectRepository(CategoriesRepository)
         private readonly categoryRepository: CategoriesRepository
     ) {}
