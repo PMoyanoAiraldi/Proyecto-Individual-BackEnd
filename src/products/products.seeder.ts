@@ -5,15 +5,20 @@ import { ProductRepository } from './products.repository';
 import { CategoriesRepository } from '../categories/categories.repository';
 import { productData } from './products.data';
 import { Product } from './products.entity';
+import { CategorySeeder } from '../categories/categories.seeder';
 
 @Injectable()
-export class ProductSeeder {
+export class ProductSeeder implements OnModuleInit{
     constructor(
-        @InjectRepository(ProductRepository)
         private readonly productRepository: ProductRepository,
-        @InjectRepository(CategoriesRepository)
-        private readonly categoryRepository: CategoriesRepository
+        private readonly categoryRepository: CategoriesRepository,
+        private readonly categorySeeder: CategorySeeder
     ) {}
+
+    async onModuleInit() {
+        await this.categorySeeder.onModuleInit(); // Asegúrate de que las categorías se carguen primero
+        await this.seedProducts();
+    }
 
     async seedProducts(){
         const categories = await this.categoryRepository.getCategories();

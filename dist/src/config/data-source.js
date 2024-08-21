@@ -19,10 +19,10 @@ const PostgresDataSource = {
     port: parseInt(process.env.DB_PORT, 10),
     username: process.env.DB_USERNAME,
     password: process.env.DB_PASSWORD,
-    synchronize: true,
-    logging: false,
-    entities: ['../../dist/**/*.entity{.ts,.js}'],
-    migrations: []
+    synchronize: false,
+    logging: true,
+    entities: ['./ecommerce-PMoyanoAiraldi/dist/**/*.entity{.ts,.js}'],
+    migrations: ['./ecommerce-PMoyanoAiraldi/dist/src/migration/*{.ts,.js}'],
 };
 exports.postgresDataSourceConfig = (0, config_1.registerAs)('postgres', () => PostgresDataSource);
 exports.connectionSource = new typeorm_1.DataSource(PostgresDataSource);

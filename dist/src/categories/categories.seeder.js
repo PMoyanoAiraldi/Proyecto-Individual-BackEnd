@@ -18,7 +18,10 @@ let CategorySeeder = class CategorySeeder {
     constructor(categoryRepository) {
         this.categoryRepository = categoryRepository;
     }
-    async seedCategory(categories) {
+    async onModuleInit() {
+        await this.seedCategory();
+    }
+    async seedCategory(categories = categories_data_1.categoriesData) {
         const existingCategories = await this.categoryRepository.getCategories();
         const newCategories = categories_data_1.categoriesData.filter(category => !existingCategories.some(existingCategories => existingCategories.name === category.name))
             .map(category => {
@@ -26,7 +29,9 @@ let CategorySeeder = class CategorySeeder {
             newCategory.name = category.name;
             return newCategory;
         });
-        await this.categoryRepository.addCategories(newCategories);
+        if (newCategories.length > 0) {
+            await this.categoryRepository.addCategories(newCategories);
+        }
     }
 };
 exports.CategorySeeder = CategorySeeder;

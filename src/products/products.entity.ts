@@ -2,7 +2,7 @@ import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, ManyToMany, JoinTabl
 import { Category } from '../categories/categories.entity';
 import { OrderDetail } from '../orderDetail/order-detail.entity';
 
-@Entity({name: 'products'})
+@Entity()
 export class Product {
     @PrimaryGeneratedColumn('uuid')
     id: string;
@@ -22,10 +22,10 @@ export class Product {
     @Column({ type: 'text', default: 'default-image-url.jpg' })
     imgUrl: string;
 
-    @ManyToOne(() => Category, category => category.products)
+    @ManyToOne(() => Category, (category) => category.products)
     category: Category;
 
-    @ManyToMany(() => OrderDetail, orderDetail => orderDetail.products)
-    
+    @ManyToMany(() => OrderDetail, (orderDetail) => orderDetail.products)  
+    @JoinTable()
     orderDetails: OrderDetail[];
 }

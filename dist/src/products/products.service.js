@@ -8,16 +8,12 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var __param = (this && this.__param) || function (paramIndex, decorator) {
-    return function (target, key) { decorator(target, key, paramIndex); }
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ProductsService = void 0;
 const common_1 = require("@nestjs/common");
 const products_repository_1 = require("./products.repository");
 const categories_repository_1 = require("../categories/categories.repository");
 const products_entity_1 = require("./products.entity");
-const typeorm_1 = require("@nestjs/typeorm");
 let ProductsService = class ProductsService {
     constructor(productsRepository, categoriesRepository) {
         this.productsRepository = productsRepository;
@@ -30,7 +26,7 @@ let ProductsService = class ProductsService {
         return await this.productsRepository.getProductById(id);
     }
     async createProduct(createProductDto) {
-        const category = await this.categoriesRepository.findOneBy({ id: createProductDto.categoryId });
+        const category = await this.categoriesRepository.findOneById(createProductDto.categoryId);
         if (!category) {
             throw Error('La categoria no fue encontrada');
         }
@@ -42,7 +38,7 @@ let ProductsService = class ProductsService {
         for (const productData of products) {
             const category = categories.find(cat => cat.name === productData.category.name);
             if (!category) {
-                throw new Error(`Category '${productData.category.name}' not found`);
+                throw new common_1.BadRequestException(`Category '${productData.category.name}' not found`);
             }
             const exists = await this.productsRepository.getProductByName(productData.name);
             if (!exists) {
@@ -59,10 +55,7 @@ let ProductsService = class ProductsService {
         await this.productsRepository.addProducts(newProducts);
     }
     async findAll(page, limit) {
-        return await this.productsRepository.find({
-            take: limit,
-            skip: (page - 1) * limit
-        });
+        return await this.productsRepository.getProducts();
     }
     async updateProduct(id, updateProductDto) {
         return this.productsRepository.updateProduct(id, updateProductDto);
@@ -72,12 +65,21 @@ let ProductsService = class ProductsService {
     }
     async buyProduct(id) {
         const product = await this.productsRepository.getProductById(id);
-        if (product.stock === 0) {
-            throw new Error("Stock agotado");
+        if (!product) {
+            throw new common_1.BadRequestException('Producto no encontrado');
         }
-        await this.productsRepository.update(id, {
+        if (product.stock === 0) {
+            throw new common_1.BadRequestException("Stock agotado");
+        }
+        const updateProductDto = {
             stock: product.stock - 1,
-        });
+        };
+        try {
+            await this.productsRepository.updateProduct(id, updateProductDto);
+        }
+        catch (error) {
+            throw new common_1.BadRequestException('Error al actualizar el producto');
+        }
         console.log("Producto comprado exitosamente");
         return product.price;
     }
@@ -85,8 +87,6 @@ let ProductsService = class ProductsService {
 exports.ProductsService = ProductsService;
 exports.ProductsService = ProductsService = __decorate([
     (0, common_1.Injectable)(),
-    __param(0, (0, typeorm_1.InjectRepository)(products_repository_1.ProductRepository)),
-    __param(1, (0, typeorm_1.InjectRepository)(categories_repository_1.CategoriesRepository)),
     __metadata("design:paramtypes", [products_repository_1.ProductRepository,
         categories_repository_1.CategoriesRepository])
 ], ProductsService);

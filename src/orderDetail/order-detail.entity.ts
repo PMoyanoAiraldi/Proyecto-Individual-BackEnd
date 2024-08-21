@@ -2,7 +2,7 @@ import { Entity, Column, PrimaryGeneratedColumn, OneToOne, ManyToMany, JoinColum
 import { Order } from '../orders/orders.entity';
 import { Product } from '../products/products.entity';
 
-@Entity('orderdetail')
+@Entity()
 export class OrderDetail {
     @PrimaryGeneratedColumn('uuid')
     id: string;
@@ -10,10 +10,10 @@ export class OrderDetail {
     @Column('decimal', { precision: 10, scale: 2, nullable: false })
     price: number;
 
-    @OneToOne(() => Order, order => order.orderDetail)
+    @OneToOne(() => Order, (order) => order.orderDetail)
     @JoinColumn()
     order: Order;
 
-    @ManyToMany(() => Product, product => product.orderDetails)
+    @ManyToMany(() => Product, (product) => product.orderDetails)
     products: Product[];
 }

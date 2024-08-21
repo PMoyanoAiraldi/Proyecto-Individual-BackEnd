@@ -1,6 +1,8 @@
-import { Repository } from "typeorm";
+import { EntityManager } from "typeorm";
 import { Category } from "./categories.entity";
-export declare class CategoriesRepository extends Repository<Category> {
+export declare class CategoriesRepository {
+    private readonly entityManager;
+    constructor(entityManager: EntityManager);
     addCategories(categories: {
         name: string;
     }[]): Promise<Category[]>;

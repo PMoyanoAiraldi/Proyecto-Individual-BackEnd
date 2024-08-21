@@ -22,6 +22,9 @@ let CategoriesService = class CategoriesService {
     async getCategories() {
         return this.categoryRepository.getCategories();
     }
+    async findOneById(id) {
+        return this.categoryRepository.findOneById(id);
+    }
 };
 exports.CategoriesService = CategoriesService;
 exports.CategoriesService = CategoriesService = __decorate([

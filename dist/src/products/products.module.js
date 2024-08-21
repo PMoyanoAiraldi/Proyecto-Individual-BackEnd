@@ -14,18 +14,17 @@ const products_repository_1 = require("./products.repository");
 const typeorm_1 = require("@nestjs/typeorm");
 const products_entity_1 = require("./products.entity");
 const categories_entity_1 = require("../categories/categories.entity");
-const categories_repository_1 = require("../categories/categories.repository");
-const categories_seeder_1 = require("../categories/categories.seeder");
 const categories_module_1 = require("../categories/categories.module");
+const products_seeder_1 = require("./products.seeder");
 let ProductsModule = class ProductsModule {
 };
 exports.ProductsModule = ProductsModule;
 exports.ProductsModule = ProductsModule = __decorate([
     (0, common_1.Module)({
         imports: [typeorm_1.TypeOrmModule.forFeature([products_entity_1.Product, categories_entity_1.Category]), categories_module_1.CategoriesModule],
-        providers: [products_service_1.ProductsService, products_repository_1.ProductRepository, categories_repository_1.CategoriesRepository, categories_seeder_1.CategorySeeder],
+        providers: [products_service_1.ProductsService, products_repository_1.ProductRepository, products_seeder_1.ProductSeeder],
         controllers: [products_controller_1.ProductsController],
-        exports: [products_service_1.ProductsService]
+        exports: [products_service_1.ProductsService, products_repository_1.ProductRepository, products_seeder_1.ProductSeeder]
     })
 ], ProductsModule);
 //# sourceMappingURL=products.module.js.map

@@ -3,7 +3,7 @@ import { ProductsService } from "./products.service";
 import { AuthGuard } from "ecommerce-PMoyanoAiraldi/guard/auth/auth.guard";
 import { CreateProductDto } from "./dto/create-product.dto";
 import { responseProductDto } from "./dto/response-product.dto";
-import { updateProductDto } from "./dto/update-products.dto";
+import { UpdateProductDto } from "./dto/update-products.dto";
 import { Product } from "./products.entity";
 
 
@@ -38,7 +38,7 @@ export class ProductsController{
     @Put('id')
     @UseGuards(AuthGuard)
     @HttpCode(HttpStatus.OK)
-    updateProducts(@Param('id') id: string, @Body() updateProduct: updateProductDto){
+    updateProducts(@Param('id') id: string, @Body() updateProduct: UpdateProductDto){
         return this.productsService.updateProduct(id, updateProduct)
     }
 

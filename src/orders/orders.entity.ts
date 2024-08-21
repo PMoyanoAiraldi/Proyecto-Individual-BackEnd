@@ -2,19 +2,18 @@ import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToOne, JoinColumn
 import { User } from '../users/users.entity';
 import { OrderDetail } from '../orderDetail/order-detail.entity';
 
-@Entity('order')
+@Entity()
 export class Order {
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
-    @ManyToOne(() => User, user => user.orders)
+    @ManyToOne(() => User, (user) => user.orders)
     user: User;
 
     @Column()
     date: Date;
 
-    @OneToOne(() => OrderDetail, orderDetail => orderDetail.order)
-    @JoinColumn()
+    @OneToOne(() => OrderDetail, (orderDetail) => orderDetail.order)
     orderDetail: OrderDetail;
     
 }

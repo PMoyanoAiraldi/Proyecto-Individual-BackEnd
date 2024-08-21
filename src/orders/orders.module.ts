@@ -18,11 +18,11 @@ import { CategoriesRepository } from "../categories/categories.repository";
 
 
 @Module({
-    imports: [TypeOrmModule.forFeature([Order, OrderDetail,OrderRepository, User, Product]),
+    imports: [TypeOrmModule.forFeature([Order, OrderDetail, User, Product]),
     UsersModule,
     ProductsModule, 
     OrderDetailModule],
-    providers: [OrderService, UsersService, ProductsService, ProductRepository, CategoriesRepository],
+    providers: [OrderService,  UsersService, OrderRepository,ProductsService, ProductRepository, CategoriesRepository],
     controllers: [OrderController],
 })
 export class OrderModule {}

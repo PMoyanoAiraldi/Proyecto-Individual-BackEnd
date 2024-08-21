@@ -41,14 +41,15 @@ __decorate([
     __metadata("design:type", String)
 ], Product.prototype, "imgUrl", void 0);
 __decorate([
-    (0, typeorm_1.ManyToOne)(() => categories_entity_1.Category, category => category.products),
+    (0, typeorm_1.ManyToOne)(() => categories_entity_1.Category, (category) => category.products),
     __metadata("design:type", categories_entity_1.Category)
 ], Product.prototype, "category", void 0);
 __decorate([
-    (0, typeorm_1.ManyToMany)(() => order_detail_entity_1.OrderDetail, orderDetail => orderDetail.products),
+    (0, typeorm_1.ManyToMany)(() => order_detail_entity_1.OrderDetail, (orderDetail) => orderDetail.products),
+    (0, typeorm_1.JoinTable)(),
     __metadata("design:type", Array)
 ], Product.prototype, "orderDetails", void 0);
 exports.Product = Product = __decorate([
-    (0, typeorm_1.Entity)({ name: 'products' })
+    (0, typeorm_1.Entity)()
 ], Product);
 //# sourceMappingURL=products.entity.js.map

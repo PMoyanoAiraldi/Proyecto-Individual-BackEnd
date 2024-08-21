@@ -5,7 +5,7 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { Category } from "./categories.entity";
 import { CategoriesRepository } from "./categories.repository";
 import { CategorySeeder } from "./categories.seeder";
-//import { CategoriesSeed } from "../seeds/categories/categories.seed";
+
 
 @Module({
     imports: [TypeOrmModule.forFeature([Category])],

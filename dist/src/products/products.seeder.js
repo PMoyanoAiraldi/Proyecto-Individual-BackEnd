@@ -8,21 +8,23 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var __param = (this && this.__param) || function (paramIndex, decorator) {
-    return function (target, key) { decorator(target, key, paramIndex); }
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ProductSeeder = void 0;
 const common_1 = require("@nestjs/common");
-const typeorm_1 = require("@nestjs/typeorm");
 const products_repository_1 = require("./products.repository");
 const categories_repository_1 = require("../categories/categories.repository");
 const products_data_1 = require("./products.data");
 const products_entity_1 = require("./products.entity");
+const categories_seeder_1 = require("../categories/categories.seeder");
 let ProductSeeder = class ProductSeeder {
-    constructor(productRepository, categoryRepository) {
+    constructor(productRepository, categoryRepository, categorySeeder) {
         this.productRepository = productRepository;
         this.categoryRepository = categoryRepository;
+        this.categorySeeder = categorySeeder;
+    }
+    async onModuleInit() {
+        await this.categorySeeder.onModuleInit();
+        await this.seedProducts();
     }
     async seedProducts() {
         const categories = await this.categoryRepository.getCategories();
@@ -45,9 +47,8 @@ let ProductSeeder = class ProductSeeder {
 exports.ProductSeeder = ProductSeeder;
 exports.ProductSeeder = ProductSeeder = __decorate([
     (0, common_1.Injectable)(),
-    __param(0, (0, typeorm_1.InjectRepository)(products_repository_1.ProductRepository)),
-    __param(1, (0, typeorm_1.InjectRepository)(categories_repository_1.CategoriesRepository)),
     __metadata("design:paramtypes", [products_repository_1.ProductRepository,
-        categories_repository_1.CategoriesRepository])
+        categories_repository_1.CategoriesRepository,
+        categories_seeder_1.CategorySeeder])
 ], ProductSeeder);
 //# sourceMappingURL=products.seeder.js.map

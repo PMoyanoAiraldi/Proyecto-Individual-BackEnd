@@ -8,6 +8,8 @@ import { UsersService } from "../users/users.service";
 import { CreateOrderDetailDto } from "../orderDetail/dto/create-order-detail.dto";
 import { OrderResponseDto } from "./dto/response-order.dto";
 import { OrderDetail } from "../orderDetail/order-detail.entity";
+import { User } from "../users/users.entity";
+import { NotFoundException } from "@nestjs/common";
 
 export class OrderRepository {
     constructor(
@@ -15,13 +17,22 @@ export class OrderRepository {
     private readonly orderRepository: Repository<Order>,
     @InjectRepository(OrderDetail)
     private readonly orderDetailRepository: Repository<OrderDetail>,
-    private readonly userService: UsersService,
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
     private readonly productService: ProductsService
     ){ }
 
     async addOrder(createOrderDto: CreateOrderDto): Promise<OrderResponseDto>{
         const {userId, products} = createOrderDto;
-        const user = await this.userService.getUserById(userId)
+
+        const user = await this.userRepository.findOne({// Busca el usuario por ID incluyendo las órdenes ya realizadas
+            where: {id: userId},
+            relations: ['orders'], // Incluye las órdenes del usuario
+        })
+
+        if (!user) {
+            throw new Error(`El usuario con ID ${userId} no fue encontrado`);
+        }
 
         const order = this.orderRepository.create({ //creamos la orden
             user: user,
@@ -36,8 +47,7 @@ export class OrderRepository {
         orderDetail.products = products;
         orderDetail.order = orderEntity;
 
-        const orderDetailEntity = this.orderDetailRepository.create(orderDetail);
-        await this.orderDetailRepository.save(orderDetail);
+        const orderDetailEntity = await this.orderDetailRepository.save(orderDetail);
 
         return new OrderResponseDto(orderDetailEntity);
     }
@@ -52,24 +62,15 @@ export class OrderRepository {
 
 
     async getOrder(id: string): Promise<OrderResponseDto>{
-        const order = await this.orderRepository.findOne({
+        const order = await this.orderRepository.findOne({//obtener la orden con sus detalles, productos y usuario relacionados
             where: { id },
-            relations: ['orderDetail', 'orderDetail.products']
+            relations: ['orderDetail', 'orderDetail.products', 'user']
         });
 
         if (!order) {
-            throw new Error('La orden no fue encontrada');
+            throw new NotFoundException('La orden no fue encontrada');
         }
 
-        const orderDetail = await this.orderDetailRepository.findOne({
-            where: { order: { id } },
-            relations: ['products', 'order']
-        });
-
-        if (!orderDetail) {
-            throw new Error('Detalles de la orden no fueron encontrados');
-        }
-
-        return new OrderResponseDto(orderDetail);
+        return new OrderResponseDto(order.orderDetail);
     }
 }

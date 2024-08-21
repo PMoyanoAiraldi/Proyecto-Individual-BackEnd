@@ -80,7 +80,7 @@ __decorate([
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, update_products_dto_1.updateProductDto]),
+    __metadata("design:paramtypes", [String, update_products_dto_1.UpdateProductDto]),
     __metadata("design:returntype", void 0)
 ], ProductsController.prototype, "updateProducts", null);
 __decorate([

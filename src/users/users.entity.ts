@@ -8,16 +8,16 @@ import { v4 as uuid} from 'uuid'
 })
 export class User {
     @PrimaryGeneratedColumn('uuid')
-    id: string = uuid
+    id: string = uuid;
     
     @Column({length: 50, nullable: false})
-    name: string
+    name: string;
 
     @Column({ length: 50, unique: true, nullable: false })
-    email:string
+    email: string;
     
     @Column({ length: 20, nullable: false })
-    password: string
+    password: string;
 
     @Column({ type: 'int', nullable: true })
     phone: number;

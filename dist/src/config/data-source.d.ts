@@ -9,7 +9,7 @@ export declare const postgresDataSourceConfig: (() => {
     synchronize: boolean;
     logging: boolean;
     entities: string[];
-    migrations: any[];
+    migrations: string[];
 }) & import("@nestjs/config").ConfigFactoryKeyHost<{
     type: string;
     database: string;
@@ -20,6 +20,6 @@ export declare const postgresDataSourceConfig: (() => {
     synchronize: boolean;
     logging: boolean;
     entities: string[];
-    migrations: any[];
+    migrations: string[];
 }>;
 export declare const connectionSource: DataSource;

@@ -7,4 +7,5 @@ export declare class CategoriesService {
         name: string;
     }[]): Promise<Category[]>;
     getCategories(): Promise<Category[]>;
+    findOneById(id: string): Promise<Category | undefined>;
 }

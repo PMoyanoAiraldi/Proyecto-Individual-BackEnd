@@ -13,26 +13,22 @@ import { OrderDetailService } from "../orderDetail/order-detail.service";
 @Injectable()
 export class OrderService {
     constructor(
-        @InjectRepository(OrderRepository)
         private readonly orderRepository: OrderRepository,
         private readonly userService: UsersService,
         private readonly productsService: ProductsService,
         private readonly orderDetailService: OrderDetailService,
     ){}
 
-    createOrder(createOrderDto: CreateOrderDto): Promise<OrderResponseDto> {
+    async createOrder(createOrderDto: CreateOrderDto): Promise<OrderResponseDto> {
         return this.orderRepository.addOrder(createOrderDto);
     }
 
-    getOrder(id: string) {
+    async getOrder(id: string) {
         try {
-            const orderDetail =  this.orderRepository.getOrder(id);
-            return orderDetail;
+            return await this.orderRepository.getOrder(id);
         } catch (error) {
-          // Maneja el error y lanza una excepción adecuada
             throw new NotFoundException(error.message);
         }
     }
-
     
 }

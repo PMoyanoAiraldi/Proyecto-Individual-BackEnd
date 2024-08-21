@@ -21,7 +21,7 @@ __decorate([
     __metadata("design:type", String)
 ], Order.prototype, "id", void 0);
 __decorate([
-    (0, typeorm_1.ManyToOne)(() => users_entity_1.User, user => user.orders),
+    (0, typeorm_1.ManyToOne)(() => users_entity_1.User, (user) => user.orders),
     __metadata("design:type", users_entity_1.User)
 ], Order.prototype, "user", void 0);
 __decorate([
@@ -29,11 +29,10 @@ __decorate([
     __metadata("design:type", Date)
 ], Order.prototype, "date", void 0);
 __decorate([
-    (0, typeorm_1.OneToOne)(() => order_detail_entity_1.OrderDetail, orderDetail => orderDetail.order),
-    (0, typeorm_1.JoinColumn)(),
+    (0, typeorm_1.OneToOne)(() => order_detail_entity_1.OrderDetail, (orderDetail) => orderDetail.order),
     __metadata("design:type", order_detail_entity_1.OrderDetail)
 ], Order.prototype, "orderDetail", void 0);
 exports.Order = Order = __decorate([
-    (0, typeorm_1.Entity)('order')
+    (0, typeorm_1.Entity)()
 ], Order);
 //# sourceMappingURL=orders.entity.js.map

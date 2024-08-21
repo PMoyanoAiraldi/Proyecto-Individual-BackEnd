@@ -8,13 +8,13 @@ import { Category } from "../categories/categories.entity";
 import { CategoriesRepository } from "../categories/categories.repository";
 import { CategorySeeder } from "../categories/categories.seeder";
 import { CategoriesModule } from "../categories/categories.module";
-
+import { ProductSeeder } from "./products.seeder";
 
 
 @Module({
-    imports: [TypeOrmModule.forFeature([Product,  Category]), CategoriesModule],
-    providers: [ProductsService,ProductRepository, CategoriesRepository,CategorySeeder],
+    imports: [TypeOrmModule.forFeature([Product,  Category]),CategoriesModule],
+    providers: [ProductsService, ProductRepository, ProductSeeder],
     controllers: [ProductsController],
-    exports: [ProductsService]
+    exports: [ProductsService, ProductRepository, ProductSeeder]
 })
 export class ProductsModule{}

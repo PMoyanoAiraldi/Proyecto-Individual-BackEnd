@@ -9,7 +9,12 @@ import { Category } from './categories.entity';
 export class CategorySeeder {
     constructor( private readonly categoryRepository: CategoriesRepository) {}
 
-        async seedCategory(categories: {name: string}[]){
+    async onModuleInit() {
+        await this.seedCategory();
+    }
+
+
+        async seedCategory(categories: { name: string }[]= categoriesData){
             const existingCategories = await this.categoryRepository.getCategories();
             const newCategories = categoriesData.filter(category => 
                 !existingCategories.some(existingCategories => existingCategories.name === category.name))
@@ -18,6 +23,8 @@ export class CategorySeeder {
                     newCategory.name = category.name;
                     return newCategory;                
                 });
-                await  this.categoryRepository.addCategories(newCategories)
+                if (newCategories.length > 0) {
+                    await this.categoryRepository.addCategories(newCategories);
+                }
         }
 }

@@ -17,20 +17,27 @@ const typeorm_1 = require("typeorm");
 const orders_entity_1 = require("./orders.entity");
 const typeorm_2 = require("@nestjs/typeorm");
 const products_service_1 = require("../products/products.service");
-const users_service_1 = require("../users/users.service");
 const create_order_detail_dto_1 = require("../orderDetail/dto/create-order-detail.dto");
 const response_order_dto_1 = require("./dto/response-order.dto");
 const order_detail_entity_1 = require("../orderDetail/order-detail.entity");
+const users_entity_1 = require("../users/users.entity");
+const common_1 = require("@nestjs/common");
 let OrderRepository = class OrderRepository {
-    constructor(orderRepository, orderDetailRepository, userService, productService) {
+    constructor(orderRepository, orderDetailRepository, userRepository, productService) {
         this.orderRepository = orderRepository;
         this.orderDetailRepository = orderDetailRepository;
-        this.userService = userService;
+        this.userRepository = userRepository;
         this.productService = productService;
     }
     async addOrder(createOrderDto) {
         const { userId, products } = createOrderDto;
-        const user = await this.userService.getUserById(userId);
+        const user = await this.userRepository.findOne({
+            where: { id: userId },
+            relations: ['orders'],
+        });
+        if (!user) {
+            throw new Error(`El usuario con ID ${userId} no fue encontrado`);
+        }
         const order = this.orderRepository.create({
             user: user,
             date: new Date(),
@@ -41,8 +48,7 @@ let OrderRepository = class OrderRepository {
         orderDetail.price = total;
         orderDetail.products = products;
         orderDetail.order = orderEntity;
-        const orderDetailEntity = this.orderDetailRepository.create(orderDetail);
-        await this.orderDetailRepository.save(orderDetail);
+        const orderDetailEntity = await this.orderDetailRepository.save(orderDetail);
         return new response_order_dto_1.OrderResponseDto(orderDetailEntity);
     }
     async calculateTotal(products) {
@@ -55,28 +61,22 @@ let OrderRepository = class OrderRepository {
     async getOrder(id) {
         const order = await this.orderRepository.findOne({
             where: { id },
-            relations: ['orderDetail', 'orderDetail.products']
+            relations: ['orderDetail', 'orderDetail.products', 'user']
         });
         if (!order) {
-            throw new Error('La orden no fue encontrada');
+            throw new common_1.NotFoundException('La orden no fue encontrada');
         }
-        const orderDetail = await this.orderDetailRepository.findOne({
-            where: { order: { id } },
-            relations: ['products', 'order']
-        });
-        if (!orderDetail) {
-            throw new Error('Detalles de la orden no fueron encontrados');
-        }
-        return new response_order_dto_1.OrderResponseDto(orderDetail);
+        return new response_order_dto_1.OrderResponseDto(order.orderDetail);
     }
 };
 exports.OrderRepository = OrderRepository;
 exports.OrderRepository = OrderRepository = __decorate([
     __param(0, (0, typeorm_2.InjectRepository)(orders_entity_1.Order)),
     __param(1, (0, typeorm_2.InjectRepository)(order_detail_entity_1.OrderDetail)),
+    __param(2, (0, typeorm_2.InjectRepository)(users_entity_1.User)),
     __metadata("design:paramtypes", [typeorm_1.Repository,
         typeorm_1.Repository,
-        users_service_1.UsersService,
+        typeorm_1.Repository,
         products_service_1.ProductsService])
 ], OrderRepository);
 //# sourceMappingURL=orders.repository.js.map

@@ -28,11 +28,11 @@ let OrderModule = class OrderModule {
 exports.OrderModule = OrderModule;
 exports.OrderModule = OrderModule = __decorate([
     (0, common_1.Module)({
-        imports: [typeorm_1.TypeOrmModule.forFeature([orders_entity_1.Order, order_detail_entity_1.OrderDetail, orders_repository_1.OrderRepository, users_entity_1.User, products_entity_1.Product]),
+        imports: [typeorm_1.TypeOrmModule.forFeature([orders_entity_1.Order, order_detail_entity_1.OrderDetail, users_entity_1.User, products_entity_1.Product]),
             users_module_1.UsersModule,
             products_module_1.ProductsModule,
             order_detail_module_1.OrderDetailModule],
-        providers: [orders_service_1.OrderService, users_service_1.UsersService, products_service_1.ProductsService, products_repository_1.ProductRepository, categories_repository_1.CategoriesRepository],
+        providers: [orders_service_1.OrderService, users_service_1.UsersService, orders_repository_1.OrderRepository, products_service_1.ProductsService, products_repository_1.ProductRepository, categories_repository_1.CategoriesRepository],
         controllers: [orders_controller_1.OrderController],
     })
 ], OrderModule);

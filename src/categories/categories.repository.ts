@@ -1,8 +1,10 @@
-import { Repository } from "typeorm";
+import { EntityManager } from "typeorm";
 import { Category } from "./categories.entity";
+import { Injectable } from "@nestjs/common";
 
-
-export class CategoriesRepository extends Repository<Category>{
+@Injectable()
+export class CategoriesRepository {
+    constructor (private readonly entityManager: EntityManager) {}
     
     async addCategories(categories: { name: string }[]): Promise<Category[]> {
         const existingCategories = await this.getCategories();
@@ -17,14 +19,16 @@ export class CategoriesRepository extends Repository<Category>{
             return newCategory;
         });
 
-        return this.save(newCategories);
+        return this.entityManager.save(Category, newCategories);
     }
 
     async getCategories(): Promise<Category[]> {
-        return this.find()
+        //console.log('CategoriesRepository:', this);
+        return this.entityManager.find(Category)
     }
 
     async findOneById(id: string): Promise<Category | undefined>{
-        return this.findOne({where: {id}})
+        console.log('CategoriesRepository findOneById:', this)
+        return this.entityManager.findOne(Category,{where: {id}})
     }
 }
