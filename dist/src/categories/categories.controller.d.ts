@@ -13,4 +13,5 @@ export declare class CategoriesController {
         message: string;
         error: any;
     }>;
+    getUser(id: string): Promise<import("./categories.entity").Category>;
 }

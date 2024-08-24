@@ -19,6 +19,7 @@ const response_user_dto_1 = require("./dto/response-user.dto");
 const create_user_dto_1 = require("./dto/create-user.dto");
 const update_user_dto_1 = require("./dto/update-user.dto");
 const auth_guard_1 = require("../../guard/auth/auth.guard");
+const class_validator_1 = require("class-validator");
 let UsersController = class UsersController {
     constructor(usersService) {
         this.usersService = usersService;
@@ -31,6 +32,12 @@ let UsersController = class UsersController {
     }
     async getUser(id) {
         const user = await this.usersService.getUserById(id);
+        if (!(0, class_validator_1.IsUUID)(4, { each: true })) {
+            throw new common_1.HttpException('UUID inválido', common_1.HttpStatus.BAD_REQUEST);
+        }
+        if (!user) {
+            throw new common_1.HttpException('El usuario no fue encontrado', common_1.HttpStatus.NOT_FOUND);
+        }
         return new response_user_dto_1.default(user);
     }
     async updateUsers(id, updateUser) {
@@ -66,7 +73,7 @@ __decorate([
     (0, common_1.Get)(':id'),
     (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
     (0, common_1.HttpCode)(common_1.HttpStatus.OK),
-    __param(0, (0, common_1.Param)('id')),
+    __param(0, (0, common_1.Param)('id', new common_1.ParseUUIDPipe())),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)

@@ -15,11 +15,13 @@ class CreateOrderDto {
 }
 exports.CreateOrderDto = CreateOrderDto;
 __decorate([
-    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsUUID)(),
+    (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", String)
 ], CreateOrderDto.prototype, "userId", void 0);
 __decorate([
     (0, class_validator_1.IsArray)(),
+    (0, class_validator_1.ArrayMinSize)(1),
     __metadata("design:type", Array)
 ], CreateOrderDto.prototype, "products", void 0);
 //# sourceMappingURL=create-order.dto.js.map

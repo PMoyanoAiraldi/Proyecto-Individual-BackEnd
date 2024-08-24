@@ -16,6 +16,7 @@ exports.OrderController = void 0;
 const common_1 = require("@nestjs/common");
 const orders_service_1 = require("./orders.service");
 const create_order_dto_1 = require("./dto/create-order.dto");
+const class_validator_1 = require("class-validator");
 let OrderController = class OrderController {
     constructor(ordersService) {
         this.ordersService = ordersService;
@@ -24,7 +25,14 @@ let OrderController = class OrderController {
         return await this.ordersService.createOrder(createOrderDto);
     }
     async getOrder(id) {
-        return await this.ordersService.getOrder((id));
+        const order = await this.ordersService.getOrder((id));
+        if (!(0, class_validator_1.IsUUID)(4, { each: true })) {
+            throw new common_1.HttpException('UUID inválido', common_1.HttpStatus.BAD_REQUEST);
+        }
+        if (!order) {
+            throw new common_1.HttpException('La orden no fue encontrada', common_1.HttpStatus.NOT_FOUND);
+        }
+        return order;
     }
 };
 exports.OrderController = OrderController;
@@ -37,7 +45,7 @@ __decorate([
 ], OrderController.prototype, "createOrder", null);
 __decorate([
     (0, common_1.Get)(':id'),
-    __param(0, (0, common_1.Param)('id')),
+    __param(0, (0, common_1.Param)('id', new common_1.ParseUUIDPipe())),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)

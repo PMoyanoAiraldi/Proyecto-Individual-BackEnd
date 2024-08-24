@@ -15,6 +15,8 @@ import { UsersService } from "../users/users.service";
 import { ProductsService } from "../products/products.service";
 import { ProductRepository } from "../products/products.repository";
 import { CategoriesRepository } from "../categories/categories.repository";
+import { FileUploadRepository } from "../file-upload/file-upload.repository";
+import { CloudinaryService } from "../service/cloudinary-service/cloudinary/cloudinary.service";
 
 
 @Module({
@@ -22,7 +24,7 @@ import { CategoriesRepository } from "../categories/categories.repository";
     UsersModule,
     ProductsModule, 
     OrderDetailModule],
-    providers: [OrderService,  UsersService, OrderRepository,ProductsService, ProductRepository, CategoriesRepository],
+    providers: [OrderService,  UsersService, OrderRepository,ProductsService, ProductRepository, CategoriesRepository, FileUploadRepository, CloudinaryService],
     controllers: [OrderController],
 })
 export class OrderModule {}

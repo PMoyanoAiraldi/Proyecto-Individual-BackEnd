@@ -1,7 +1,8 @@
-import { Body, Controller, Get, Param, Post } from "@nestjs/common";
+import { Body, Controller, Get, HttpException, HttpStatus, Param, ParseUUIDPipe, Post } from "@nestjs/common";
 import { OrderService } from "./orders.service";
 import { Order } from "./orders.entity";
 import { CreateOrderDto } from "./dto/create-order.dto";
+import { IsUUID } from "class-validator";
 
 @Controller('orders')
 export class OrderController{
@@ -13,8 +14,15 @@ export class OrderController{
         }
 
     @Get(':id')
-    async getOrder(@Param('id') id: string){
-        return await this.ordersService.getOrder((id))
+    async getOrder(@Param('id', new ParseUUIDPipe()) id: string){
+        const order = await this.ordersService.getOrder((id))
+        if(!IsUUID(4, { each: true})){
+            throw new HttpException('UUID inválido', HttpStatus.BAD_REQUEST)
+        }
+        if(!order){
+            throw new HttpException('La orden no fue encontrada', HttpStatus.NOT_FOUND)
+        }
+        return order
     }
     
 }

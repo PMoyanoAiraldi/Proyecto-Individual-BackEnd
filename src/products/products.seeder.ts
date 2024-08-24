@@ -32,7 +32,7 @@ export class ProductSeeder implements OnModuleInit{
             product.description = productData.description;
             product.price = productData.price;
             product.stock = productData.stock;
-           //product.imgUrl = productData.imgUrl || 'default-image-url.png';
+           // product.imgUrl = productData.imgUrl || 'default-image-url.png';
             product.category = category;
             return product;
         });

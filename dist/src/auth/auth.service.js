@@ -22,10 +22,10 @@ let AuthService = class AuthService {
             if (user && user.password === credentials.password) {
                 return "Has inciado sesión correctamente";
             }
-            return "Email o contraseña incorrectos. Por favor intenta nuevamente";
+            throw new common_1.UnauthorizedException("Email o contraseña incorrectos. Por favor intenta nuevamente");
         }
         catch (error) {
-            return "Error al iniciar sesión. Por favor intenta nuevamente";
+            throw new common_1.InternalServerErrorException("Error al iniciar sesión. Por favor intenta nuevamente");
         }
     }
     getAuth() {

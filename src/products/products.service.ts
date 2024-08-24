@@ -4,15 +4,16 @@ import { CreateProductDto } from "./dto/create-product.dto";
 import { UpdateProductDto } from "./dto/update-products.dto";
 import { CategoriesRepository } from "../categories/categories.repository";
 import { Product } from "./products.entity";
-import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
+import { FileUploadRepository } from "../file-upload/file-upload.repository";
+import { FileUploadDto } from "../file-upload/dto/file-upload.dto";
 
 @Injectable()
 export class ProductsService{
     
     constructor (
         private readonly productsRepository: ProductRepository,
-        private readonly categoriesRepository: CategoriesRepository
+        private readonly categoriesRepository: CategoriesRepository,
+        private readonly fileUploadRepository: FileUploadRepository
     ){}
 
     async getProducts(): Promise<Product[]>{
@@ -57,19 +58,19 @@ export class ProductsService{
         await this.productsRepository.addProducts(newProducts);
     }
     
-    async findAll(page: number, limit: number): Promise<Product[]>{
+    async findAll(page: number, limit: number){
         return await this.productsRepository.getProducts();
     }
 
-    async updateProduct(id: string, updateProductDto: UpdateProductDto): Promise<Product>{
+    async updateProduct(id: string, updateProductDto: UpdateProductDto){
         return this.productsRepository.updateProduct(id, updateProductDto)
     }
 
-    async removeProduct(id: string): Promise<{id: string}>{
+    async removeProduct(id: string){
         return this.productsRepository.removeProduct(id)
     }
 
-    async buyProduct(id: string) : Promise<number> {
+    async buyProduct(id: string) {
         const product =  await this.productsRepository.getProductById(id);
         if (!product) {
             throw new BadRequestException('Producto no encontrado');
@@ -92,5 +93,17 @@ export class ProductsService{
         
         console.log("Producto comprado exitosamente")
         return product.price;
+    }
+
+    async uploadFile(file: FileUploadDto, id: string){
+        const url = await this.fileUploadRepository.uploadFile({
+            fieldname: file.fieldname,
+            buffer: file.buffer,
+            originalname: file.originalname,
+            mimetype: file.mimetype,
+            size: file.size
+        })
+        await this.productsRepository.updateProduct(id, {imgUrl: url});
+        return {imgUrl: url}
     }
 }

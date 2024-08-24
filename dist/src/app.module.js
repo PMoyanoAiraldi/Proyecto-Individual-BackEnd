@@ -26,6 +26,10 @@ const products_seeder_1 = require("./products/products.seeder");
 const categories_seeder_1 = require("./categories/categories.seeder");
 const products_repository_1 = require("./products/products.repository");
 const categories_repository_1 = require("./categories/categories.repository");
+const cloudinary_service_1 = require("./service/cloudinary-service/cloudinary/cloudinary.service");
+const file_upload_controller_1 = require("./file-upload/file-upload.controller");
+const file_upload_service_1 = require("./file-upload/file-upload.service");
+const file_upload_repository_1 = require("./file-upload/file-upload.repository");
 let AppModule = class AppModule {
     constructor(productSeeder, categorySeeder) {
         this.productSeeder = productSeeder;
@@ -55,8 +59,8 @@ exports.AppModule = AppModule = __decorate([
             orders_module_1.OrderModule,
             order_detail_module_1.OrderDetailModule,
         ],
-        controllers: [app_controller_1.AppController],
-        providers: [app_service_1.AppService, products_seeder_1.ProductSeeder, categories_seeder_1.CategorySeeder, categories_repository_1.CategoriesRepository, products_repository_1.ProductRepository],
+        controllers: [app_controller_1.AppController, file_upload_controller_1.FileUploadController],
+        providers: [app_service_1.AppService, products_seeder_1.ProductSeeder, categories_seeder_1.CategorySeeder, categories_repository_1.CategoriesRepository, products_repository_1.ProductRepository, cloudinary_service_1.CloudinaryService, file_upload_service_1.FileUploadService, file_upload_repository_1.FileUploadRepository],
         exports: [products_seeder_1.ProductSeeder, categories_seeder_1.CategorySeeder]
     }),
     __metadata("design:paramtypes", [products_seeder_1.ProductSeeder,

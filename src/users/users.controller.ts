@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post, Query, Put, Delete, UseGuards, NotFoundException } from "@nestjs/common";
+import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post, Query, Put, Delete, UseGuards, NotFoundException, ParseUUIDPipe, HttpException } from "@nestjs/common";
 import { UsersService } from "./users.service";
 import UserDto from "./dto/response-user.dto";
 import UserResponseDto from "./dto/response-user.dto";
@@ -6,6 +6,7 @@ import { CreateUserDto } from "./dto/create-user.dto";
 import { updateUserDto } from "./dto/update-user.dto";
 import { AuthGuard } from "ecommerce-PMoyanoAiraldi/guard/auth/auth.guard";
 import { User } from "./users.entity";
+import { IsUUID } from "class-validator";
 
 @Controller('users') //al colocar como parámetro 'users', define que la ruta será /users
 export class UsersController{
@@ -20,7 +21,6 @@ export class UsersController{
         return this.usersService.getUsers();
     }
 
-
     @Post()
     @HttpCode(HttpStatus.CREATED)
     async createUsers(@Body() CreateUserDto: CreateUserDto): Promise<User>{
@@ -30,8 +30,14 @@ export class UsersController{
     @Get(':id')
     @UseGuards(AuthGuard)
     @HttpCode(HttpStatus.OK)
-    async getUser(@Param('id') id: string): Promise<UserResponseDto>{
+    async getUser(@Param('id', new ParseUUIDPipe()) id: string): Promise<UserResponseDto>{
         const user = await this.usersService.getUserById(id)
+        if(!IsUUID(4, { each: true})){
+            throw new HttpException('UUID inválido', HttpStatus.BAD_REQUEST)
+        }
+        if(!user){
+            throw new HttpException('El usuario no fue encontrado', HttpStatus.NOT_FOUND)
+        }
         return new UserResponseDto(user)
     }
 

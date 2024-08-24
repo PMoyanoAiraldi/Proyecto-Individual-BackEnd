@@ -16,6 +16,8 @@ exports.CategoriesController = void 0;
 const common_1 = require("@nestjs/common");
 const categories_service_1 = require("./categories.service");
 const categories_seeder_1 = require("./categories.seeder");
+const auth_guard_1 = require("../../guard/auth/auth.guard");
+const class_validator_1 = require("class-validator");
 let CategoriesController = class CategoriesController {
     constructor(categoriesService, categoriesSeeder) {
         this.categoriesService = categoriesService;
@@ -30,6 +32,16 @@ let CategoriesController = class CategoriesController {
             return { message: 'Error seeding categories', error };
         }
     }
+    async getUser(id) {
+        const category = await this.categoriesService.findOneById(id);
+        if (!(0, class_validator_1.IsUUID)(4, { each: true })) {
+            throw new common_1.HttpException('UUID inválido', common_1.HttpStatus.BAD_REQUEST);
+        }
+        if (!category) {
+            throw new common_1.HttpException('La categoria no fue encontrada', common_1.HttpStatus.NOT_FOUND);
+        }
+        return category;
+    }
 };
 exports.CategoriesController = CategoriesController;
 __decorate([
@@ -39,6 +51,15 @@ __decorate([
     __metadata("design:paramtypes", [Array]),
     __metadata("design:returntype", Promise)
 ], CategoriesController.prototype, "seedCategories", null);
+__decorate([
+    (0, common_1.Get)(':id'),
+    (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
+    (0, common_1.HttpCode)(common_1.HttpStatus.OK),
+    __param(0, (0, common_1.Param)('id', new common_1.ParseUUIDPipe())),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], CategoriesController.prototype, "getUser", null);
 exports.CategoriesController = CategoriesController = __decorate([
     (0, common_1.Controller)('categories'),
     __metadata("design:paramtypes", [categories_service_1.CategoriesService,

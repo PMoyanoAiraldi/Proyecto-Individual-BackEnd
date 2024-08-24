@@ -15,7 +15,10 @@ class CreateUserDto {
 }
 exports.CreateUserDto = CreateUserDto;
 __decorate([
+    (0, class_validator_1.IsNotEmpty)(),
     (0, class_validator_1.IsString)(),
+    (0, class_validator_1.MaxLength)(80),
+    (0, class_validator_1.MinLength)(3),
     __metadata("design:type", String)
 ], CreateUserDto.prototype, "name", void 0);
 __decorate([
@@ -24,15 +27,19 @@ __decorate([
 ], CreateUserDto.prototype, "email", void 0);
 __decorate([
     (0, class_validator_1.Matches)(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[=!@#$%^&*])[A-Za-z\d=!@#$%^&*]{8,15}$/, {
-        message: "La contraseña debe contener al menos una minúscula, una mayúscula, un número, un caracter especial y tenga entre 8 a 15 caracteres"
+        message: "La contraseña debe contener al menos una letra minúscula, una letra mayúscula, un número y un carácter especial (!@#$%^&*)"
     }),
+    (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], CreateUserDto.prototype, "password", void 0);
 __decorate([
+    (0, class_validator_1.MaxLength)(80),
+    (0, class_validator_1.MinLength)(3),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], CreateUserDto.prototype, "address", void 0);
 __decorate([
+    (0, class_validator_1.IsNotEmpty)(),
     (0, class_validator_1.IsNumber)(),
     __metadata("design:type", Number)
 ], CreateUserDto.prototype, "phone", void 0);
@@ -43,6 +50,8 @@ __decorate([
 ], CreateUserDto.prototype, "country", void 0);
 __decorate([
     (0, class_validator_1.IsString)(),
+    (0, class_validator_1.MaxLength)(20),
+    (0, class_validator_1.MinLength)(5),
     (0, class_validator_1.IsOptional)(),
     __metadata("design:type", String)
 ], CreateUserDto.prototype, "city", void 0);

@@ -14,6 +14,10 @@ import { ProductSeeder } from './products/products.seeder';
 import { CategorySeeder } from './categories/categories.seeder';
 import { ProductRepository } from './products/products.repository';
 import { CategoriesRepository } from './categories/categories.repository';
+import { CloudinaryService } from './service/cloudinary-service/cloudinary/cloudinary.service';
+import { FileUploadController } from './file-upload/file-upload.controller';
+import { FileUploadService } from './file-upload/file-upload.service';
+import { FileUploadRepository } from './file-upload/file-upload.repository';
 
 
 @Module({
@@ -35,8 +39,8 @@ import { CategoriesRepository } from './categories/categories.repository';
       OrderModule,
       OrderDetailModule,
     ],
-  controllers: [AppController],
-  providers: [AppService, ProductSeeder, CategorySeeder, CategoriesRepository, ProductRepository],
+  controllers: [AppController, FileUploadController],
+  providers: [AppService, ProductSeeder, CategorySeeder, CategoriesRepository, ProductRepository, CloudinaryService, FileUploadService, FileUploadRepository],
   exports: [ProductSeeder, CategorySeeder]
 })
 
