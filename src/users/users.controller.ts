@@ -14,6 +14,7 @@ export class UsersController{
 
     @Get()  
     @HttpCode(HttpStatus.OK)//para que el status sea 200
+    @UseGuards(AuthGuard)
     getUsers(
         @Query('page') page: number = 1,
         @Query('limit') limit: number = 5
@@ -42,6 +43,7 @@ export class UsersController{
     }
 
     @Put('id')
+    @UseGuards(AuthGuard)
     @HttpCode(HttpStatus.OK)
     async updateUsers(@Param('id') id: string, @Body() updateUser: updateUserDto): Promise<User>{
         const user = await this.usersService.updateUsers(id, updateUser) 
@@ -49,6 +51,7 @@ export class UsersController{
     }
 
     @Delete('id')
+    @UseGuards(AuthGuard)
     @HttpCode(HttpStatus.OK)//@HttpCode(HttpStatus.NO_CONTENT) // 204 No Content for successful deletion
     async deleteUsers(@Param('id') id: string): Promise<void>{
         const result = await this.usersService.removeUsers(id)

@@ -1,48 +1,54 @@
 import { Injectable } from "@nestjs/common";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { updateUserDto } from "./dto/update-user.dto";
-import { InjectRepository } from "@nestjs/typeorm";
+import { InjectEntityManager, InjectRepository } from "@nestjs/typeorm";
 import { User } from "./users.entity";
-import { Repository } from "typeorm";
+import { EntityManager, Repository } from "typeorm";
 
 
-export class UsersRepository extends Repository<User> {
-    
+export class UsersRepository {
+    constructor(
+    @InjectEntityManager()
+    private readonly entityManager: EntityManager
+    ){}
+
     async getUsers(): Promise<User[]> {
-        return this.find(); 
+        return this.entityManager.find(User); 
     }
 
     async getUserById(id: string): Promise<User | undefined>{
-        return this.findOne({ where: {id}})
+        return this.entityManager.findOne(User, { where: {id}})
     }
 
     async createUser(createUserDto: CreateUserDto): Promise <User>{
-        const newUser = this.create(createUserDto) // Crea una instancia del usuario con los datos del DTO
-        await this.save(newUser);//Guarda el nuevo usuario en la BD
+        const newUser = new User();
+        console.log(newUser);
+        Object.assign(newUser, createUserDto);
+        await this.entityManager.save(newUser);
         return newUser;
     }
 
     async findOneEmail(email: string){
-        return this.findOne({where: {email}})
+        return this.entityManager.findOne(User, {where: {email}})
     }
 
 
     async updateUsers(id: string, userUpdate: updateUserDto): Promise <User>{
-        const user = await this.findOne({ where: {id}});
+        const user = await this.entityManager.findOne(User, { where: {id}});
         if(!user){
             throw new Error(`El usuario con ${id} no fue encontrado`);
         }
         Object.assign(user, userUpdate);// Actualiza las propiedades del usuario con los datos del DTO
-        await this.save(user)
+        await this.entityManager.save(user)
         return user;
     }
 
     async removeUsers(id: string): Promise <string>{
-        const user = await this.findOne({ where: {id}});
+        const user = await this.entityManager.findOne(User,{ where: {id}});
         if(!user){
             throw new Error(`El usuario con ${id} no fue encontrado`);
         }
-        await this.remove(user);
+        await this.entityManager.remove(user);
         return id;
     }
 }

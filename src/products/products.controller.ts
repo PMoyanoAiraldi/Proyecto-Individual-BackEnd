@@ -13,17 +13,19 @@ export class ProductsController{
     constructor(private readonly productsService: ProductsService) {} 
 
     @Post('seeder')
+    @HttpCode(HttpStatus.CREATED)
     async seedProducts(@Body() products: Product[]){
         return this.productsService.seedProducts(products)
     }
 
     @Post()
-    @UseGuards(AuthGuard)
     @HttpCode(HttpStatus.CREATED)
     async createProducts(@Body() CreateProductDto: CreateProductDto){
         return await this.productsService.createProduct(CreateProductDto)
     }
-    @Get() 
+
+    @Get()
+    @HttpCode(HttpStatus.OK) 
     async getProducts(){ //define el comportamiento
         return await this.productsService.getProducts();
     }

@@ -12,11 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.User = void 0;
 const typeorm_1 = require("typeorm");
 const orders_entity_1 = require("../orders/orders.entity");
-const uuid_1 = require("uuid");
 let User = class User {
-    constructor() {
-        this.id = uuid_1.v4;
-    }
 };
 exports.User = User;
 __decorate([
@@ -32,7 +28,7 @@ __decorate([
     __metadata("design:type", String)
 ], User.prototype, "email", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ length: 20, nullable: false }),
+    (0, typeorm_1.Column)({ nullable: false }),
     __metadata("design:type", String)
 ], User.prototype, "password", void 0);
 __decorate([

@@ -8,7 +8,7 @@ import { v4 as uuid} from 'uuid'
 })
 export class User {
     @PrimaryGeneratedColumn('uuid')
-    id: string = uuid;
+    id: string;
     
     @Column({length: 50, nullable: false})
     name: string;
@@ -16,7 +16,7 @@ export class User {
     @Column({ length: 50, unique: true, nullable: false })
     email: string;
     
-    @Column({ length: 20, nullable: false })
+    @Column({ nullable: false })
     password: string;
 
     @Column({ type: 'int', nullable: true })
@@ -30,6 +30,9 @@ export class User {
 
     @Column({ length: 50, nullable: true })
     city: string;
+
+    @Column({default: false})
+    admin: boolean
 
     @OneToMany(() => Order, order => order.user)
     orders: Order[];

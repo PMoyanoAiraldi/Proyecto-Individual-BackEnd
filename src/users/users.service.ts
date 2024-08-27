@@ -12,7 +12,6 @@ import UserResponseDto from "./dto/response-user.dto";
 @Injectable()
 export class UsersService{
     constructor (
-        @InjectRepository(UsersRepository)
         private readonly usersRepository: UsersRepository
     ){}
 
@@ -22,21 +21,6 @@ export class UsersService{
 
     async getUserById(id: string){
         return this.usersRepository.getUserById(id)
-        // const user = await this.usersRepository.getUserById(id)
-        // if(!user){
-        //     throw new NotFoundException(`El usuario con ${id} no fue encontrado`);
-        // }
-        // // Mapear la entidad de usuario a DTO
-        // const userResponseDto = new UserResponseDto({
-        //     name: user.name,
-        //     email: user.email,
-        //     address: user.address,
-        //     phone: user.phone,
-        //     country: user.country,
-        //     city: user.city,
-        // });
-
-        // return userResponseDto;
     }
 
     async createUser(createUserDto: CreateUserDto): Promise<User>{

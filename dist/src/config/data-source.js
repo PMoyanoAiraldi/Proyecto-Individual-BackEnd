@@ -19,7 +19,7 @@ const PostgresDataSource = {
     port: parseInt(process.env.DB_PORT, 10),
     username: process.env.DB_USERNAME,
     password: process.env.DB_PASSWORD,
-    synchronize: false,
+    synchronize: true,
     logging: true,
     entities: ['./ecommerce-PMoyanoAiraldi/dist/**/*.entity{.ts,.js}'],
     migrations: ['./ecommerce-PMoyanoAiraldi/dist/src/migration/*{.ts,.js}'],

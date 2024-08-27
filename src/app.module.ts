@@ -23,7 +23,6 @@ import { FileUploadRepository } from './file-upload/file-upload.repository';
 @Module({
     imports: [
       ConfigModule.forRoot({
-      
         isGlobal: true,
         load: [ postgresDataSourceConfig]
       }),

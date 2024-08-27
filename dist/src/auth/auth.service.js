@@ -11,30 +11,47 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthService = void 0;
 const common_1 = require("@nestjs/common");
+const bcrypt_1 = require("bcrypt");
 const users_service_1 = require("../users/users.service");
+const jwt_1 = require("@nestjs/jwt");
 let AuthService = class AuthService {
-    constructor(userService) {
+    constructor(userService, jwtService) {
         this.userService = userService;
+        this.jwtService = jwtService;
     }
-    async signIn(credentials) {
-        try {
-            const user = await this.userService.findOneByEmail(credentials.email);
-            if (user && user.password === credentials.password) {
-                return "Has inciado sesión correctamente";
-            }
-            throw new common_1.UnauthorizedException("Email o contraseña incorrectos. Por favor intenta nuevamente");
+    async signIn(loginUser) {
+        const user = await this.userService.findOneByEmail(loginUser.email);
+        if (!user) {
+            throw new common_1.HttpException('Usuario no encontrado', 404);
         }
-        catch (error) {
-            throw new common_1.InternalServerErrorException("Error al iniciar sesión. Por favor intenta nuevamente");
+        const isPasswordMatchin = await (0, bcrypt_1.compare)(loginUser.password, user.password);
+        if (!isPasswordMatchin) {
+            throw new common_1.HttpException('Credenciales incorrectas', 400);
         }
+        const token = await this.createToken(user);
+        return { token };
     }
-    getAuth() {
-        return 'Get all auth';
+    async createToken(user) {
+        const payload = {
+            id: user.id,
+            email: user.email
+        };
+        return this.jwtService.signAsync(payload);
+    }
+    async signUp(signUp) {
+        if (signUp.password !== signUp.passwordConfirm) {
+            throw new common_1.HttpException('La contraseña no coincide', 400);
+        }
+        signUp.password = await (0, bcrypt_1.hash)(signUp.password, 10);
+        return this.userService.createUser(signUp);
+    }
+    async getAuth() {
     }
 };
 exports.AuthService = AuthService;
 exports.AuthService = AuthService = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [users_service_1.UsersService])
+    __metadata("design:paramtypes", [users_service_1.UsersService,
+        jwt_1.JwtService])
 ], AuthService);
 //# sourceMappingURL=auth.service.js.map
