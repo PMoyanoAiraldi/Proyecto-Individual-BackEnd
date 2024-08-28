@@ -7,6 +7,7 @@ import { User } from "./users.entity";
 import { Repository } from "typeorm";
 import { UsersRepository } from "./users.repository";
 import UserResponseDto from "./dto/response-user.dto";
+import { UserWithAdminDto } from "./dto/admin-user.dto";
 
 
 @Injectable()
@@ -15,7 +16,7 @@ export class UsersService{
         private readonly usersRepository: UsersRepository
     ){}
 
-    async getUsers(): Promise<User[]>{
+    async getUsers(): Promise<UserWithAdminDto[]>{
         return this.usersRepository.getUsers();
     }
 

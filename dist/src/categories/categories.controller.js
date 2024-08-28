@@ -16,7 +16,7 @@ exports.CategoriesController = void 0;
 const common_1 = require("@nestjs/common");
 const categories_service_1 = require("./categories.service");
 const categories_seeder_1 = require("./categories.seeder");
-const auth_guard_1 = require("../../guard/auth/auth.guard");
+const auth_guard_1 = require("../../guard/auth.guard");
 const class_validator_1 = require("class-validator");
 let CategoriesController = class CategoriesController {
     constructor(categoriesService, categoriesSeeder) {

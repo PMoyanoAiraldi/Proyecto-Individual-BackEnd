@@ -3,7 +3,7 @@ import { OrderService } from "./orders.service";
 import { Order } from "./orders.entity";
 import { CreateOrderDto } from "./dto/create-order.dto";
 import { IsUUID } from "class-validator";
-import { AuthGuard } from "ecommerce-PMoyanoAiraldi/guard/auth/auth.guard";
+import { AuthGuard } from "ecommerce-PMoyanoAiraldi/guard/auth.guard";
 
 @Controller('orders')
 export class OrderController{

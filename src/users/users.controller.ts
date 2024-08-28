@@ -4,9 +4,12 @@ import UserDto from "./dto/response-user.dto";
 import UserResponseDto from "./dto/response-user.dto";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { updateUserDto } from "./dto/update-user.dto";
-import { AuthGuard } from "ecommerce-PMoyanoAiraldi/guard/auth/auth.guard";
+import { AuthGuard } from "ecommerce-PMoyanoAiraldi/guard/auth.guard";
 import { User } from "./users.entity";
 import { IsUUID } from "class-validator";
+import { Roles } from "../decorators/roles.decorator";
+import { RolesGuard } from "ecommerce-PMoyanoAiraldi/guard/roles.guard";
+import { UserWithAdminDto } from "./dto/admin-user.dto";
 
 @Controller('users') //al colocar como parámetro 'users', define que la ruta será /users
 export class UsersController{
@@ -14,11 +17,12 @@ export class UsersController{
 
     @Get()  
     @HttpCode(HttpStatus.OK)//para que el status sea 200
-    @UseGuards(AuthGuard)
-    getUsers(
+    @UseGuards(AuthGuard, RolesGuard)
+    @Roles('admin')
+    async getUsers(
         @Query('page') page: number = 1,
         @Query('limit') limit: number = 5
-    ){ 
+    ): Promise<UserWithAdminDto[]>{ 
         return this.usersService.getUsers();
     }
 

@@ -4,6 +4,7 @@ import { updateUserDto } from "./dto/update-user.dto";
 import { InjectEntityManager, InjectRepository } from "@nestjs/typeorm";
 import { User } from "./users.entity";
 import { EntityManager, Repository } from "typeorm";
+import { UserWithAdminDto } from "./dto/admin-user.dto";
 
 
 export class UsersRepository {
@@ -12,8 +13,19 @@ export class UsersRepository {
     private readonly entityManager: EntityManager
     ){}
 
-    async getUsers(): Promise<User[]> {
-        return this.entityManager.find(User); 
+    async getUsers(): Promise<UserWithAdminDto[]> {
+        const users = await this.entityManager.find(User)
+        return users.map(user => {
+            const userDto = new UserWithAdminDto();
+            userDto.name = user.name;
+            userDto.email = user.email;
+            userDto.address = user.address;
+            userDto.phone = user.phone;
+            userDto.country = user.country;
+            userDto.city = user.city;
+            userDto.admin = user.admin
+            return userDto
+        })
     }
 
     async getUserById(id: string): Promise<User | undefined>{

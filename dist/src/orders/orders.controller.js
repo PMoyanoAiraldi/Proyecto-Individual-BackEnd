@@ -17,7 +17,7 @@ const common_1 = require("@nestjs/common");
 const orders_service_1 = require("./orders.service");
 const create_order_dto_1 = require("./dto/create-order.dto");
 const class_validator_1 = require("class-validator");
-const auth_guard_1 = require("../../guard/auth/auth.guard");
+const auth_guard_1 = require("../../guard/auth.guard");
 let OrderController = class OrderController {
     constructor(ordersService) {
         this.ordersService = ordersService;

@@ -16,12 +16,24 @@ exports.UsersRepository = void 0;
 const typeorm_1 = require("@nestjs/typeorm");
 const users_entity_1 = require("./users.entity");
 const typeorm_2 = require("typeorm");
+const admin_user_dto_1 = require("./dto/admin-user.dto");
 let UsersRepository = class UsersRepository {
     constructor(entityManager) {
         this.entityManager = entityManager;
     }
     async getUsers() {
-        return this.entityManager.find(users_entity_1.User);
+        const users = await this.entityManager.find(users_entity_1.User);
+        return users.map(user => {
+            const userDto = new admin_user_dto_1.UserWithAdminDto();
+            userDto.name = user.name;
+            userDto.email = user.email;
+            userDto.address = user.address;
+            userDto.phone = user.phone;
+            userDto.country = user.country;
+            userDto.city = user.city;
+            userDto.admin = user.admin;
+            return userDto;
+        });
     }
     async getUserById(id) {
         return this.entityManager.findOne(users_entity_1.User, { where: { id } });

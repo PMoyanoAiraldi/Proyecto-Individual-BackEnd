@@ -1,11 +1,13 @@
 import { Controller, Get, Post, Delete, Put,HttpCode, HttpStatus, UseGuards, Param, Body, Query, ParseUUIDPipe, HttpException} from "@nestjs/common";
 import { ProductsService } from "./products.service";
-import { AuthGuard } from "ecommerce-PMoyanoAiraldi/guard/auth/auth.guard";
+import { AuthGuard } from "ecommerce-PMoyanoAiraldi/guard/auth.guard";
 import { CreateProductDto } from "./dto/create-product.dto";
 import { responseProductDto } from "./dto/response-product.dto";
 import { UpdateProductDto } from "./dto/update-products.dto";
 import { Product } from "./products.entity";
 import { IsUUID } from "class-validator";
+import { RolesGuard } from "ecommerce-PMoyanoAiraldi/guard/roles.guard";
+import { Roles } from "../decorators/roles.decorator";
 
 
 @Controller('products') 
@@ -49,10 +51,11 @@ export class ProductsController{
         return product
     }
 
-    @Put('id')
-    @UseGuards(AuthGuard)
+    @Put(':id')
     @HttpCode(HttpStatus.OK)
-    async updateProducts(@Param('id') id: string, @Body() updateProduct: UpdateProductDto){
+    @UseGuards(AuthGuard, RolesGuard)
+    @Roles('admin')
+    async updateProducts(@Param('id') id: string, @Body() updateProduct: UpdateProductDto): Promise<Product>{
         return await this.productsService.updateProduct(id, updateProduct)
     }
 

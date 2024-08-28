@@ -18,13 +18,15 @@ const users_service_1 = require("./users.service");
 const response_user_dto_1 = require("./dto/response-user.dto");
 const create_user_dto_1 = require("./dto/create-user.dto");
 const update_user_dto_1 = require("./dto/update-user.dto");
-const auth_guard_1 = require("../../guard/auth/auth.guard");
+const auth_guard_1 = require("../../guard/auth.guard");
 const class_validator_1 = require("class-validator");
+const roles_decorator_1 = require("../decorators/roles.decorator");
+const roles_guard_1 = require("../../guard/roles.guard");
 let UsersController = class UsersController {
     constructor(usersService) {
         this.usersService = usersService;
     }
-    getUsers(page = 1, limit = 5) {
+    async getUsers(page = 1, limit = 5) {
         return this.usersService.getUsers();
     }
     async createUsers(CreateUserDto) {
@@ -55,12 +57,13 @@ exports.UsersController = UsersController;
 __decorate([
     (0, common_1.Get)(),
     (0, common_1.HttpCode)(common_1.HttpStatus.OK),
-    (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
+    (0, common_1.UseGuards)(auth_guard_1.AuthGuard, roles_guard_1.RolesGuard),
+    (0, roles_decorator_1.Roles)('admin'),
     __param(0, (0, common_1.Query)('page')),
     __param(1, (0, common_1.Query)('limit')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number, Number]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:returntype", Promise)
 ], UsersController.prototype, "getUsers", null);
 __decorate([
     (0, common_1.Post)(),

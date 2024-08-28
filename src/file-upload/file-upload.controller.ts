@@ -3,7 +3,7 @@ import { FileUploadService } from './file-upload.service';
 import { ProductsService } from '../products/products.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ImageUploadPipe } from '../pipes/image/image-upload.pipe';
-import { AuthGuard } from 'ecommerce-PMoyanoAiraldi/guard/auth/auth.guard';
+import { AuthGuard } from 'ecommerce-PMoyanoAiraldi/guard/auth.guard';
 
 @Controller('files')
 export class FileUploadController {

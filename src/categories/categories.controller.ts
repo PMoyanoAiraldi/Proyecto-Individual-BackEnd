@@ -1,7 +1,7 @@
 import { Body, Controller, Get, HttpCode, HttpException, HttpStatus, Param, ParseUUIDPipe, Post, UseGuards } from "@nestjs/common";
 import { CategoriesService } from "./categories.service";
 import { CategorySeeder } from "./categories.seeder";
-import { AuthGuard } from "ecommerce-PMoyanoAiraldi/guard/auth/auth.guard";
+import { AuthGuard } from "ecommerce-PMoyanoAiraldi/guard/auth.guard";
 import { IsUUID } from "class-validator";
 
 @Controller('categories')

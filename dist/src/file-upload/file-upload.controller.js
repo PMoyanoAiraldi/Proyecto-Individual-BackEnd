@@ -18,7 +18,7 @@ const file_upload_service_1 = require("./file-upload.service");
 const products_service_1 = require("../products/products.service");
 const platform_express_1 = require("@nestjs/platform-express");
 const image_upload_pipe_1 = require("../pipes/image/image-upload.pipe");
-const auth_guard_1 = require("../../guard/auth/auth.guard");
+const auth_guard_1 = require("../../guard/auth.guard");
 let FileUploadController = class FileUploadController {
     constructor(fileUploadService, productService) {
         this.fileUploadService = fileUploadService;
