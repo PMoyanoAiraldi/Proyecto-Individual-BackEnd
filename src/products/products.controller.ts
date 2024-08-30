@@ -8,8 +8,9 @@ import { Product } from "./products.entity";
 import { IsUUID } from "class-validator";
 import { RolesGuard } from "ecommerce-PMoyanoAiraldi/guard/roles.guard";
 import { Roles } from "../decorators/roles.decorator";
+import { ApiQuery, ApiSecurity, ApiTags } from "@nestjs/swagger";
 
-
+@ApiTags('Products')
 @Controller('products') 
 export class ProductsController{
     constructor(private readonly productsService: ProductsService) {} 
@@ -27,15 +28,14 @@ export class ProductsController{
     }
 
     @Get()
-    @HttpCode(HttpStatus.OK) 
-    async getProducts(){ //define el comportamiento
-        return await this.productsService.getProducts();
-    }
-
-    @Get()
     @HttpCode(HttpStatus.OK)
-    async findAll(@Query('page') page: number = 1, @Query('limit') limit: number = 10){
-        return await this.productsService.findAll(page, limit)
+    @ApiQuery({ name: 'page', required: false, description: 'Número de página', example: 1 })
+    @ApiQuery({ name: 'limit', required: false, description: 'Cantidad de resultados por página', example: 5 }) 
+    async getProducts(
+        @Query('page') page: number = 1, 
+        @Query('limit') limit: number = 5
+    ): Promise<Product[]> { 
+        return await this.productsService.getProducts(page, limit);
     }
 
     @Get(':id')
@@ -54,13 +54,15 @@ export class ProductsController{
     @Put(':id')
     @HttpCode(HttpStatus.OK)
     @UseGuards(AuthGuard, RolesGuard)
+    @ApiSecurity('bearer')
     @Roles('admin')
     async updateProducts(@Param('id') id: string, @Body() updateProduct: UpdateProductDto): Promise<Product>{
         return await this.productsService.updateProduct(id, updateProduct)
     }
 
-    @Delete('id')
+    @Delete(':id')
     @UseGuards(AuthGuard)
+    @ApiSecurity('bearer')
     @HttpCode(HttpStatus.OK)
     async deleteProducts(@Param('id') id: string){
         return await this.productsService.removeProduct(id)

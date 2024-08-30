@@ -10,8 +10,12 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateUserDto = void 0;
+const openapi = require("@nestjs/swagger");
 const class_validator_1 = require("class-validator");
 class updateUserDto {
+    static _OPENAPI_METADATA_FACTORY() {
+        return { name: { required: true, type: () => String }, email: { required: true, type: () => String }, password: { required: true, type: () => String, pattern: "/^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[=!@#$%^&*])[A-Za-z\\d=!@#$%^&*]{8,15}$/" }, address: { required: true, type: () => String }, phone: { required: true, type: () => Number }, country: { required: false, type: () => String }, city: { required: false, type: () => String } };
+    }
 }
 exports.updateUserDto = updateUserDto;
 __decorate([

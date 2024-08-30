@@ -6,7 +6,7 @@ import { UserWithAdminDto } from "./dto/admin-user.dto";
 export declare class UsersRepository {
     private readonly entityManager;
     constructor(entityManager: EntityManager);
-    getUsers(): Promise<UserWithAdminDto[]>;
+    getUsers(page: number, limit: number): Promise<UserWithAdminDto[]>;
     getUserById(id: string): Promise<User | undefined>;
     createUser(createUserDto: CreateUserDto): Promise<User>;
     findOneEmail(email: string): Promise<User>;

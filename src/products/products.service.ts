@@ -13,11 +13,11 @@ export class ProductsService{
     constructor (
         private readonly productsRepository: ProductRepository,
         private readonly categoriesRepository: CategoriesRepository,
-        private readonly fileUploadRepository: FileUploadRepository
+        
     ){}
 
-    async getProducts(): Promise<Product[]>{
-        return this.productsRepository.getProducts()
+    async getProducts(page: number = 1, limit: number = 5): Promise<Product[]>{
+        return this.productsRepository.getProducts(page, limit)
     }
 
     async getProduct(id: string): Promise<Product>{
@@ -31,6 +31,16 @@ export class ProductsService{
         }
         return this.productsRepository.createProduct(createProductDto, category)
     }
+
+
+    async updateProduct(id: string, updateProductDto: UpdateProductDto){
+        return this.productsRepository.updateProduct(id, updateProductDto)
+    }
+
+    async removeProduct(id: string){
+        return this.productsRepository.removeProduct(id)
+    }
+
 
     async seedProducts(products: Product[]) {
         const categories = await this.categoriesRepository.getCategories();
@@ -58,17 +68,6 @@ export class ProductsService{
         await this.productsRepository.addProducts(newProducts);
     }
     
-    async findAll(page: number, limit: number){
-        return await this.productsRepository.getProducts();
-    }
-
-    async updateProduct(id: string, updateProductDto: UpdateProductDto){
-        return this.productsRepository.updateProduct(id, updateProductDto)
-    }
-
-    async removeProduct(id: string){
-        return this.productsRepository.removeProduct(id)
-    }
 
     async buyProduct(id: string) {
         const product =  await this.productsRepository.getProductById(id);
@@ -95,15 +94,5 @@ export class ProductsService{
         return product.price;
     }
 
-    async uploadFile(file: FileUploadDto, id: string){
-        const url = await this.fileUploadRepository.uploadFile({
-            fieldname: file.fieldname,
-            buffer: file.buffer,
-            originalname: file.originalname,
-            mimetype: file.mimetype,
-            size: file.size
-        })
-        await this.productsRepository.updateProduct(id, {imgUrl: url});
-        return {imgUrl: url}
-    }
+    
 }

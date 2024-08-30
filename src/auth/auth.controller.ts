@@ -3,8 +3,9 @@ import { AuthService } from "./auth.service";
 import { LoginUserDto} from "./dto/login-user.dto";
 import { SignUpAuthDto } from "./dto/signup-auth.dto";
 import UserResponseDto from "../users/dto/response-user.dto";
+import { ApiTags } from "@nestjs/swagger";
 
-
+@ApiTags('Auth')
 @Controller('auth') 
 export class AuthController{
     constructor(private readonly authService: AuthService) {} 
@@ -17,12 +18,8 @@ export class AuthController{
     @Post('signup')
     async signUp(@Body() signUpUser:SignUpAuthDto, @Req() request){
         const user = await this.authService.signUp(signUpUser)
-        return new UserResponseDto(user)
+        return (`User ID '${user.id}'`)
     }
 
-    @Get() 
-    getAuth(){ 
-        return this.authService.getAuth();
-    }
 
 }

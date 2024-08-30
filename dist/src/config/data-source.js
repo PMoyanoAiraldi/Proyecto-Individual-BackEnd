@@ -22,7 +22,7 @@ const PostgresDataSource = {
     synchronize: false,
     logging: true,
     entities: ['./ecommerce-PMoyanoAiraldi/dist/**/*.entity{.ts,.js}'],
-    migrations: ['./ecommerce-PMoyanoAiraldi/dist/src/migration/*{.ts,.js}'],
+    migrations: ['./ecommerce-PMoyanoAiraldi/dist/migration/*{.ts,.js}'],
 };
 exports.postgresDataSourceConfig = (0, config_1.registerAs)('postgres', () => PostgresDataSource);
 exports.connectionSource = new typeorm_1.DataSource(PostgresDataSource);

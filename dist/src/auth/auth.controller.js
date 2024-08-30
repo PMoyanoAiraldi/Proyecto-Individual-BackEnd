@@ -13,11 +13,12 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthController = void 0;
+const openapi = require("@nestjs/swagger");
 const common_1 = require("@nestjs/common");
 const auth_service_1 = require("./auth.service");
 const login_user_dto_1 = require("./dto/login-user.dto");
 const signup_auth_dto_1 = require("./dto/signup-auth.dto");
-const response_user_dto_1 = require("../users/dto/response-user.dto");
+const swagger_1 = require("@nestjs/swagger");
 let AuthController = class AuthController {
     constructor(authService) {
         this.authService = authService;
@@ -27,15 +28,13 @@ let AuthController = class AuthController {
     }
     async signUp(signUpUser, request) {
         const user = await this.authService.signUp(signUpUser);
-        return new response_user_dto_1.default(user);
-    }
-    getAuth() {
-        return this.authService.getAuth();
+        return (`User ID '${user.id}'`);
     }
 };
 exports.AuthController = AuthController;
 __decorate([
     (0, common_1.Post)('signin'),
+    openapi.ApiResponse({ status: 201 }),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [login_user_dto_1.LoginUserDto]),
@@ -43,19 +42,15 @@ __decorate([
 ], AuthController.prototype, "signIn", null);
 __decorate([
     (0, common_1.Post)('signup'),
+    openapi.ApiResponse({ status: 201, type: String }),
     __param(0, (0, common_1.Body)()),
     __param(1, (0, common_1.Req)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [signup_auth_dto_1.SignUpAuthDto, Object]),
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "signUp", null);
-__decorate([
-    (0, common_1.Get)(),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", void 0)
-], AuthController.prototype, "getAuth", null);
 exports.AuthController = AuthController = __decorate([
+    (0, swagger_1.ApiTags)('Auth'),
     (0, common_1.Controller)('auth'),
     __metadata("design:paramtypes", [auth_service_1.AuthService])
 ], AuthController);

@@ -3,7 +3,10 @@ import { CategoriesService } from "./categories.service";
 import { CategorySeeder } from "./categories.seeder";
 import { AuthGuard } from "ecommerce-PMoyanoAiraldi/guard/auth.guard";
 import { IsUUID } from "class-validator";
+import { ApiSecurity, ApiTags } from "@nestjs/swagger";
 
+
+@ApiTags('Categories')
 @Controller('categories')
 export class CategoriesController{
     constructor(
@@ -23,8 +26,9 @@ export class CategoriesController{
 
     @Get(':id')
     @UseGuards(AuthGuard)
+    @ApiSecurity('bearer')
     @HttpCode(HttpStatus.OK)
-    async getUser(@Param('id', new ParseUUIDPipe()) id: string){
+    async getCategory(@Param('id', new ParseUUIDPipe()) id: string){
         const category = await this.categoriesService.findOneById(id)
         if(!IsUUID(4, { each: true})){
             throw new HttpException('UUID inválido', HttpStatus.BAD_REQUEST)

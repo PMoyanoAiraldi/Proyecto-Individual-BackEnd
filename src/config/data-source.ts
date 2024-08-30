@@ -27,7 +27,7 @@ const PostgresDataSource = {
     synchronize: false,
     logging: true,
     entities: ['./ecommerce-PMoyanoAiraldi/dist/**/*.entity{.ts,.js}'],
-    migrations:['./ecommerce-PMoyanoAiraldi/dist/src/migration/*{.ts,.js}'],
+    migrations:['./ecommerce-PMoyanoAiraldi/dist/migration/*{.ts,.js}'],
 }
 
 export const postgresDataSourceConfig = registerAs('postgres', () => PostgresDataSource)

@@ -43,15 +43,9 @@ export class SignUpAuthDto{
     @MinLength(5)
     @IsOptional()
     city?: string;
+
+    constructor(partial: Partial<SignUpAuthDto>) {
+        Object.assign(this, partial);
+    }
 }
 
-export interface User {
-    id: string;
-    name: string;
-    email: string;
-    password: string;
-    address: string;
-    phone: number;
-    country?: string;
-    city?: string;
-}

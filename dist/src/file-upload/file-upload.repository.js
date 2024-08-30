@@ -12,17 +12,29 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.FileUploadRepository = void 0;
 const common_1 = require("@nestjs/common");
 const cloudinary_service_1 = require("../service/cloudinary-service/cloudinary/cloudinary.service");
+const products_repository_1 = require("../products/products.repository");
 let FileUploadRepository = class FileUploadRepository {
-    constructor(cloudinaryService) {
+    constructor(cloudinaryService, productsRepository) {
         this.cloudinaryService = cloudinaryService;
+        this.productsRepository = productsRepository;
     }
-    async uploadFile(file) {
-        return this.cloudinaryService.uploadFile(file.buffer, file.originalname);
+    async uploadFile(file, productId) {
+        const fileUploadDto = {
+            fieldname: file.fieldname,
+            buffer: file.buffer,
+            originalname: file.originalname,
+            mimetype: file.mimetype,
+            size: file.size
+        };
+        const url = await this.cloudinaryService.uploadFile(fileUploadDto.buffer, fileUploadDto.originalname);
+        await this.productsRepository.updateProduct(productId, { imgUrl: url });
+        return { imgUrl: url };
     }
 };
 exports.FileUploadRepository = FileUploadRepository;
 exports.FileUploadRepository = FileUploadRepository = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [cloudinary_service_1.CloudinaryService])
+    __metadata("design:paramtypes", [cloudinary_service_1.CloudinaryService,
+        products_repository_1.ProductRepository])
 ], FileUploadRepository);
 //# sourceMappingURL=file-upload.repository.js.map

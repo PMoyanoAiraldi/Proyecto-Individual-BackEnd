@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.OrderResponseDto = void 0;
+const openapi = require("@nestjs/swagger");
 class OrderResponseDto {
     constructor(orderDetail) {
         this.id = orderDetail.id;
@@ -13,6 +14,9 @@ class OrderResponseDto {
                 id: orderDetail.order.user.id
             },
         };
+    }
+    static _OPENAPI_METADATA_FACTORY() {
+        return { id: { required: true, type: () => String }, price: { required: true, type: () => Number }, products: { required: true, type: () => [Object] }, order: { required: true, type: () => ({ id: { required: true, type: () => String }, date: { required: true, type: () => Date }, user: { required: true, type: () => ({ id: { required: true, type: () => String } }) } }) } };
     }
 }
 exports.OrderResponseDto = OrderResponseDto;

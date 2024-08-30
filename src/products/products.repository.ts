@@ -19,9 +19,12 @@ async addProducts(products: Product[]): Promise<Product[]> {
     return this.entityManager.save(Product, newProducts);//guarda los nuevos productos
 }
 
-async getProducts(): Promise<Product[]>{
-    
-    return this.entityManager.find(Product)
+async getProducts(page: number, limit: number): Promise<Product[]>{
+    const offset = (page - 1) * limit;
+    return this.entityManager.find(Product,{
+        skip: offset,
+        take: limit
+    })
 }
 
 async getProductById(id: string): Promise<Product>{

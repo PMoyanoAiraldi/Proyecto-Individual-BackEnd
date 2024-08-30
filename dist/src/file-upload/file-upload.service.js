@@ -16,8 +16,8 @@ let FileUploadService = class FileUploadService {
     constructor(fileUploadRepository) {
         this.fileUploadRepository = fileUploadRepository;
     }
-    async uploadFile(file) {
-        return this.fileUploadRepository.uploadFile(file);
+    async uploadFile(file, productId) {
+        return this.fileUploadRepository.uploadFile(file, productId);
     }
 };
 exports.FileUploadService = FileUploadService;

@@ -6,7 +6,7 @@ import { UserWithAdminDto } from "./dto/admin-user.dto";
 export declare class UsersService {
     private readonly usersRepository;
     constructor(usersRepository: UsersRepository);
-    getUsers(): Promise<UserWithAdminDto[]>;
+    getUsers(page?: number, limit?: number): Promise<UserWithAdminDto[]>;
     getUserById(id: string): Promise<User>;
     createUser(createUserDto: CreateUserDto): Promise<User>;
     findOneByEmail(email: string): Promise<User>;

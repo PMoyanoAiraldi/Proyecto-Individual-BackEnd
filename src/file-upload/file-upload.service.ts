@@ -7,7 +7,7 @@ import { FileUploadRepository } from './file-upload.repository';
 export class FileUploadService {
     constructor(private readonly fileUploadRepository: FileUploadRepository){}
 
-    async uploadFile(file: FileUploadDto){
-        return this.fileUploadRepository.uploadFile(file)
+    async uploadFile(file: Express.Multer.File, productId: string){
+        return this.fileUploadRepository.uploadFile(file, productId)
     }
 }

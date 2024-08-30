@@ -16,8 +16,8 @@ export class UsersService{
         private readonly usersRepository: UsersRepository
     ){}
 
-    async getUsers(): Promise<UserWithAdminDto[]>{
-        return this.usersRepository.getUsers();
+    async getUsers(page: number = 1, limit: number = 5): Promise<UserWithAdminDto[]>{
+        return this.usersRepository.getUsers(page, limit);
     }
 
     async getUserById(id: string){

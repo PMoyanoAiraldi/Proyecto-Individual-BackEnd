@@ -43,10 +43,10 @@ let AuthService = class AuthService {
         if (signUp.password !== signUp.passwordConfirm) {
             throw new common_1.HttpException('La contraseña no coincide', 400);
         }
-        signUp.password = await (0, bcrypt_1.hash)(signUp.password, 10);
+        const hashedPassword = await (0, bcrypt_1.hash)(signUp.password, 10);
+        signUp.password = hashedPassword;
+        console.log('Hashed password:', signUp.password);
         return this.userService.createUser(signUp);
-    }
-    async getAuth() {
     }
 };
 exports.AuthService = AuthService;

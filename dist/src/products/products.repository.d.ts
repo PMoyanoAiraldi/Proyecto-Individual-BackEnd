@@ -7,7 +7,7 @@ export declare class ProductRepository {
     private readonly entityManager;
     constructor(entityManager: EntityManager);
     addProducts(products: Product[]): Promise<Product[]>;
-    getProducts(): Promise<Product[]>;
+    getProducts(page: number, limit: number): Promise<Product[]>;
     getProductById(id: string): Promise<Product>;
     getProductByName(name: string): Promise<Product>;
     createProduct(createProductDto: CreateProductDto, category: Category): Promise<Product>;

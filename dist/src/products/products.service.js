@@ -14,15 +14,13 @@ const common_1 = require("@nestjs/common");
 const products_repository_1 = require("./products.repository");
 const categories_repository_1 = require("../categories/categories.repository");
 const products_entity_1 = require("./products.entity");
-const file_upload_repository_1 = require("../file-upload/file-upload.repository");
 let ProductsService = class ProductsService {
-    constructor(productsRepository, categoriesRepository, fileUploadRepository) {
+    constructor(productsRepository, categoriesRepository) {
         this.productsRepository = productsRepository;
         this.categoriesRepository = categoriesRepository;
-        this.fileUploadRepository = fileUploadRepository;
     }
-    async getProducts() {
-        return this.productsRepository.getProducts();
+    async getProducts(page = 1, limit = 5) {
+        return this.productsRepository.getProducts(page, limit);
     }
     async getProduct(id) {
         return await this.productsRepository.getProductById(id);
@@ -33,6 +31,12 @@ let ProductsService = class ProductsService {
             throw Error('La categoria no fue encontrada');
         }
         return this.productsRepository.createProduct(createProductDto, category);
+    }
+    async updateProduct(id, updateProductDto) {
+        return this.productsRepository.updateProduct(id, updateProductDto);
+    }
+    async removeProduct(id) {
+        return this.productsRepository.removeProduct(id);
     }
     async seedProducts(products) {
         const categories = await this.categoriesRepository.getCategories();
@@ -56,15 +60,6 @@ let ProductsService = class ProductsService {
         }
         await this.productsRepository.addProducts(newProducts);
     }
-    async findAll(page, limit) {
-        return await this.productsRepository.getProducts();
-    }
-    async updateProduct(id, updateProductDto) {
-        return this.productsRepository.updateProduct(id, updateProductDto);
-    }
-    async removeProduct(id) {
-        return this.productsRepository.removeProduct(id);
-    }
     async buyProduct(id) {
         const product = await this.productsRepository.getProductById(id);
         if (!product) {
@@ -85,23 +80,11 @@ let ProductsService = class ProductsService {
         console.log("Producto comprado exitosamente");
         return product.price;
     }
-    async uploadFile(file, id) {
-        const url = await this.fileUploadRepository.uploadFile({
-            fieldname: file.fieldname,
-            buffer: file.buffer,
-            originalname: file.originalname,
-            mimetype: file.mimetype,
-            size: file.size
-        });
-        await this.productsRepository.updateProduct(id, { imgUrl: url });
-        return { imgUrl: url };
-    }
 };
 exports.ProductsService = ProductsService;
 exports.ProductsService = ProductsService = __decorate([
     (0, common_1.Injectable)(),
     __metadata("design:paramtypes", [products_repository_1.ProductRepository,
-        categories_repository_1.CategoriesRepository,
-        file_upload_repository_1.FileUploadRepository])
+        categories_repository_1.CategoriesRepository])
 ], ProductsService);
 //# sourceMappingURL=products.service.js.map

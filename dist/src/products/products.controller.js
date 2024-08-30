@@ -13,6 +13,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ProductsController = void 0;
+const openapi = require("@nestjs/swagger");
 const common_1 = require("@nestjs/common");
 const products_service_1 = require("./products.service");
 const auth_guard_1 = require("../../guard/auth.guard");
@@ -21,6 +22,7 @@ const update_products_dto_1 = require("./dto/update-products.dto");
 const class_validator_1 = require("class-validator");
 const roles_guard_1 = require("../../guard/roles.guard");
 const roles_decorator_1 = require("../decorators/roles.decorator");
+const swagger_1 = require("@nestjs/swagger");
 let ProductsController = class ProductsController {
     constructor(productsService) {
         this.productsService = productsService;
@@ -31,11 +33,8 @@ let ProductsController = class ProductsController {
     async createProducts(CreateProductDto) {
         return await this.productsService.createProduct(CreateProductDto);
     }
-    async getProducts() {
-        return await this.productsService.getProducts();
-    }
-    async findAll(page = 1, limit = 10) {
-        return await this.productsService.findAll(page, limit);
+    async getProducts(page = 1, limit = 5) {
+        return await this.productsService.getProducts(page, limit);
     }
     async getProduct(id) {
         const product = await this.productsService.getProduct((id));
@@ -58,6 +57,7 @@ exports.ProductsController = ProductsController;
 __decorate([
     (0, common_1.Post)('seeder'),
     (0, common_1.HttpCode)(common_1.HttpStatus.CREATED),
+    openapi.ApiResponse({ status: common_1.HttpStatus.CREATED }),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Array]),
@@ -66,6 +66,7 @@ __decorate([
 __decorate([
     (0, common_1.Post)(),
     (0, common_1.HttpCode)(common_1.HttpStatus.CREATED),
+    openapi.ApiResponse({ status: common_1.HttpStatus.CREATED, type: require("./products.entity").Product }),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [create_product_dto_1.CreateProductDto]),
@@ -74,22 +75,19 @@ __decorate([
 __decorate([
     (0, common_1.Get)(),
     (0, common_1.HttpCode)(common_1.HttpStatus.OK),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", Promise)
-], ProductsController.prototype, "getProducts", null);
-__decorate([
-    (0, common_1.Get)(),
-    (0, common_1.HttpCode)(common_1.HttpStatus.OK),
+    (0, swagger_1.ApiQuery)({ name: 'page', required: false, description: 'Número de página', example: 1 }),
+    (0, swagger_1.ApiQuery)({ name: 'limit', required: false, description: 'Cantidad de resultados por página', example: 5 }),
+    openapi.ApiResponse({ status: common_1.HttpStatus.OK, type: [require("./products.entity").Product] }),
     __param(0, (0, common_1.Query)('page')),
     __param(1, (0, common_1.Query)('limit')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number, Number]),
     __metadata("design:returntype", Promise)
-], ProductsController.prototype, "findAll", null);
+], ProductsController.prototype, "getProducts", null);
 __decorate([
     (0, common_1.Get)(':id'),
     (0, common_1.HttpCode)(common_1.HttpStatus.OK),
+    openapi.ApiResponse({ status: common_1.HttpStatus.OK, type: require("./products.entity").Product }),
     __param(0, (0, common_1.Param)('id', new common_1.ParseUUIDPipe())),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
@@ -99,7 +97,9 @@ __decorate([
     (0, common_1.Put)(':id'),
     (0, common_1.HttpCode)(common_1.HttpStatus.OK),
     (0, common_1.UseGuards)(auth_guard_1.AuthGuard, roles_guard_1.RolesGuard),
+    (0, swagger_1.ApiSecurity)('bearer'),
     (0, roles_decorator_1.Roles)('admin'),
+    openapi.ApiResponse({ status: common_1.HttpStatus.OK, type: require("./products.entity").Product }),
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
@@ -107,15 +107,18 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], ProductsController.prototype, "updateProducts", null);
 __decorate([
-    (0, common_1.Delete)('id'),
+    (0, common_1.Delete)(':id'),
     (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
+    (0, swagger_1.ApiSecurity)('bearer'),
     (0, common_1.HttpCode)(common_1.HttpStatus.OK),
+    openapi.ApiResponse({ status: common_1.HttpStatus.OK }),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], ProductsController.prototype, "deleteProducts", null);
 exports.ProductsController = ProductsController = __decorate([
+    (0, swagger_1.ApiTags)('Products'),
     (0, common_1.Controller)('products'),
     __metadata("design:paramtypes", [products_service_1.ProductsService])
 ], ProductsController);

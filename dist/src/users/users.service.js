@@ -16,8 +16,8 @@ let UsersService = class UsersService {
     constructor(usersRepository) {
         this.usersRepository = usersRepository;
     }
-    async getUsers() {
-        return this.usersRepository.getUsers();
+    async getUsers(page = 1, limit = 5) {
+        return this.usersRepository.getUsers(page, limit);
     }
     async getUserById(id) {
         return this.usersRepository.getUserById(id);

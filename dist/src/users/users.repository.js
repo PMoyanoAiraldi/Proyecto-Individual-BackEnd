@@ -13,6 +13,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UsersRepository = void 0;
+const bcrypt = require("bcrypt");
 const typeorm_1 = require("@nestjs/typeorm");
 const users_entity_1 = require("./users.entity");
 const typeorm_2 = require("typeorm");
@@ -21,8 +22,12 @@ let UsersRepository = class UsersRepository {
     constructor(entityManager) {
         this.entityManager = entityManager;
     }
-    async getUsers() {
-        const users = await this.entityManager.find(users_entity_1.User);
+    async getUsers(page, limit) {
+        const offset = (page - 1) * limit;
+        const users = await this.entityManager.find(users_entity_1.User, {
+            skip: offset,
+            take: limit
+        });
         return users.map(user => {
             const userDto = new admin_user_dto_1.UserWithAdminDto();
             userDto.name = user.name;
@@ -42,6 +47,7 @@ let UsersRepository = class UsersRepository {
         const newUser = new users_entity_1.User();
         console.log(newUser);
         Object.assign(newUser, createUserDto);
+        console.log('Usuario antes de guardar:', newUser);
         await this.entityManager.save(newUser);
         return newUser;
     }
@@ -52,6 +58,10 @@ let UsersRepository = class UsersRepository {
         const user = await this.entityManager.findOne(users_entity_1.User, { where: { id } });
         if (!user) {
             throw new Error(`El usuario con ${id} no fue encontrado`);
+        }
+        if (userUpdate.password) {
+            const salt = await bcrypt.genSalt(10);
+            userUpdate.password = await bcrypt.hash(userUpdate.password, salt);
         }
         Object.assign(user, userUpdate);
         await this.entityManager.save(user);

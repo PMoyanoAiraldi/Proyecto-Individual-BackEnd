@@ -4,7 +4,9 @@ import { Order } from "./orders.entity";
 import { CreateOrderDto } from "./dto/create-order.dto";
 import { IsUUID } from "class-validator";
 import { AuthGuard } from "ecommerce-PMoyanoAiraldi/guard/auth.guard";
+import { ApiSecurity, ApiTags } from "@nestjs/swagger";
 
+@ApiTags('Orders')
 @Controller('orders')
 export class OrderController{
     constructor(private readonly ordersService: OrderService) {}
@@ -12,12 +14,14 @@ export class OrderController{
     @Post()
     @HttpCode(HttpStatus.CREATED)
     @UseGuards(AuthGuard)
+    @ApiSecurity('bearer')
         async createOrder(@Body() createOrderDto: CreateOrderDto ){
             return await this.ordersService.createOrder(createOrderDto)
         }
 
     @Get(':id')
     @UseGuards(AuthGuard)
+    @ApiSecurity('bearer')
     @HttpCode(HttpStatus.OK)
     async getOrder(@Param('id', new ParseUUIDPipe()) id: string){
         const order = await this.ordersService.getOrder((id))

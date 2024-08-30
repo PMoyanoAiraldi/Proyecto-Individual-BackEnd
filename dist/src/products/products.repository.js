@@ -22,8 +22,12 @@ let ProductRepository = class ProductRepository {
         const newProducts = products.filter((product) => !existingProducts.some((prod) => prod.name === product.name));
         return this.entityManager.save(products_entity_1.Product, newProducts);
     }
-    async getProducts() {
-        return this.entityManager.find(products_entity_1.Product);
+    async getProducts(page, limit) {
+        const offset = (page - 1) * limit;
+        return this.entityManager.find(products_entity_1.Product, {
+            skip: offset,
+            take: limit
+        });
     }
     async getProductById(id) {
         return this.entityManager.findOne(products_entity_1.Product, { where: { id } });

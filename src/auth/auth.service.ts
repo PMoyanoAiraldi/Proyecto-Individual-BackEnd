@@ -38,16 +38,17 @@ export class AuthService{
             return this.jwtService.signAsync(payload)
         }
     
-    async signUp(signUp: SignUpAuthDto){
+    async signUp(signUp: SignUpAuthDto): Promise<User>{
         if(signUp.password !== signUp.passwordConfirm){
             throw new HttpException('La contraseña no coincide', 400)
         }
-        signUp.password = await hash(signUp.password, 10)//10 es el N° de caracteres que se agregue al crear el hash 
+        //signUp.password = await hash(signUp.password, 10)//10 es el N° de caracteres que se agregue al crear el hash 
+
+        const hashedPassword = await hash(signUp.password, 10);
+        signUp.password = hashedPassword;
+        console.log('Hashed password:', signUp.password);
         return this.userService.createUser(signUp)
     }
 
-    async getAuth(){
-
-    }
     
 }

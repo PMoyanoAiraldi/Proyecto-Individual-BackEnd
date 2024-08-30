@@ -13,10 +13,12 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.OrderDetailController = void 0;
+const openapi = require("@nestjs/swagger");
 const common_1 = require("@nestjs/common");
 const create_order_detail_dto_1 = require("./dto/create-order-detail.dto");
 const order_detail_service_1 = require("./order-detail.service");
 const class_validator_1 = require("class-validator");
+const swagger_1 = require("@nestjs/swagger");
 let OrderDetailController = class OrderDetailController {
     constructor(orderDetailService) {
         this.orderDetailService = orderDetailService;
@@ -38,6 +40,7 @@ let OrderDetailController = class OrderDetailController {
 exports.OrderDetailController = OrderDetailController;
 __decorate([
     (0, common_1.Post)(),
+    openapi.ApiResponse({ status: 201, type: require("./order-detail.entity").OrderDetail }),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [create_order_detail_dto_1.CreateOrderDetailDto]),
@@ -45,12 +48,14 @@ __decorate([
 ], OrderDetailController.prototype, "createOrderDetail", null);
 __decorate([
     (0, common_1.Get)(':id'),
+    openapi.ApiResponse({ status: 200, type: [require("./order-detail.entity").OrderDetail] }),
     __param(0, (0, common_1.Param)('id', new common_1.ParseUUIDPipe())),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], OrderDetailController.prototype, "getOrder", null);
 exports.OrderDetailController = OrderDetailController = __decorate([
+    (0, swagger_1.ApiTags)('OrderDetail'),
     (0, common_1.Controller)('orderdetail'),
     __metadata("design:paramtypes", [order_detail_service_1.OrderDetailService])
 ], OrderDetailController);

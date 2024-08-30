@@ -2,7 +2,10 @@ import { Body, Controller, Get, HttpException, HttpStatus, Param, ParseUUIDPipe,
 import { CreateOrderDetailDto } from "./dto/create-order-detail.dto";
 import { OrderDetailService } from "./order-detail.service";
 import { IsUUID } from "class-validator";
+import { ApiTags } from "@nestjs/swagger";
 
+
+@ApiTags('OrderDetail')
 @Controller('orderdetail')
 export class OrderDetailController{
     constructor(private readonly orderDetailService: OrderDetailService) {}

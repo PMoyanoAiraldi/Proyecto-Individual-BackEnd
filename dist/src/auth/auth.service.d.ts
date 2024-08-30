@@ -12,5 +12,4 @@ export declare class AuthService {
     }>;
     private createToken;
     signUp(signUp: SignUpAuthDto): Promise<User>;
-    getAuth(): Promise<void>;
 }

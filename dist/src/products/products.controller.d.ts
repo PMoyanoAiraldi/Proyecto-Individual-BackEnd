@@ -7,8 +7,7 @@ export declare class ProductsController {
     constructor(productsService: ProductsService);
     seedProducts(products: Product[]): Promise<void>;
     createProducts(CreateProductDto: CreateProductDto): Promise<Product>;
-    getProducts(): Promise<Product[]>;
-    findAll(page?: number, limit?: number): Promise<Product[]>;
+    getProducts(page?: number, limit?: number): Promise<Product[]>;
     getProduct(id: string): Promise<Product>;
     updateProducts(id: string, updateProduct: UpdateProductDto): Promise<Product>;
     deleteProducts(id: string): Promise<{

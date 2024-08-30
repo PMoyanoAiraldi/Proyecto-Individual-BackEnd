@@ -13,19 +13,19 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FileUploadController = void 0;
+const openapi = require("@nestjs/swagger");
 const common_1 = require("@nestjs/common");
 const file_upload_service_1 = require("./file-upload.service");
-const products_service_1 = require("../products/products.service");
 const platform_express_1 = require("@nestjs/platform-express");
 const image_upload_pipe_1 = require("../pipes/image/image-upload.pipe");
 const auth_guard_1 = require("../../guard/auth.guard");
+const swagger_1 = require("@nestjs/swagger");
 let FileUploadController = class FileUploadController {
-    constructor(fileUploadService, productService) {
+    constructor(fileUploadService) {
         this.fileUploadService = fileUploadService;
-        this.productService = productService;
     }
-    async uploadFile(id, file) {
-        return this.productService.uploadFile(file, id);
+    async uploadFile(productId, file) {
+        return this.fileUploadService.uploadFile(file, productId);
     }
 };
 exports.FileUploadController = FileUploadController;
@@ -34,15 +34,16 @@ __decorate([
     (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
     (0, common_1.HttpCode)(common_1.HttpStatus.OK),
     (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('file')),
-    __param(0, (0, common_1.Param)('id')),
+    openapi.ApiResponse({ status: common_1.HttpStatus.OK }),
+    __param(0, (0, common_1.Param)('productId')),
     __param(1, (0, common_1.UploadedFile)(new image_upload_pipe_1.ImageUploadPipe())),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String, Object]),
     __metadata("design:returntype", Promise)
 ], FileUploadController.prototype, "uploadFile", null);
 exports.FileUploadController = FileUploadController = __decorate([
+    (0, swagger_1.ApiTags)('Files'),
     (0, common_1.Controller)('files'),
-    __metadata("design:paramtypes", [file_upload_service_1.FileUploadService,
-        products_service_1.ProductsService])
+    __metadata("design:paramtypes", [file_upload_service_1.FileUploadService])
 ], FileUploadController);
 //# sourceMappingURL=file-upload.controller.js.map

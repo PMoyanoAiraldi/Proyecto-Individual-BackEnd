@@ -13,11 +13,13 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CategoriesController = void 0;
+const openapi = require("@nestjs/swagger");
 const common_1 = require("@nestjs/common");
 const categories_service_1 = require("./categories.service");
 const categories_seeder_1 = require("./categories.seeder");
 const auth_guard_1 = require("../../guard/auth.guard");
 const class_validator_1 = require("class-validator");
+const swagger_1 = require("@nestjs/swagger");
 let CategoriesController = class CategoriesController {
     constructor(categoriesService, categoriesSeeder) {
         this.categoriesService = categoriesService;
@@ -32,7 +34,7 @@ let CategoriesController = class CategoriesController {
             return { message: 'Error seeding categories', error };
         }
     }
-    async getUser(id) {
+    async getCategory(id) {
         const category = await this.categoriesService.findOneById(id);
         if (!(0, class_validator_1.IsUUID)(4, { each: true })) {
             throw new common_1.HttpException('UUID inválido', common_1.HttpStatus.BAD_REQUEST);
@@ -46,6 +48,7 @@ let CategoriesController = class CategoriesController {
 exports.CategoriesController = CategoriesController;
 __decorate([
     (0, common_1.Post)('seeder'),
+    openapi.ApiResponse({ status: 201, type: Object }),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Array]),
@@ -54,13 +57,16 @@ __decorate([
 __decorate([
     (0, common_1.Get)(':id'),
     (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
+    (0, swagger_1.ApiSecurity)('bearer'),
     (0, common_1.HttpCode)(common_1.HttpStatus.OK),
+    openapi.ApiResponse({ status: common_1.HttpStatus.OK, type: require("./categories.entity").Category }),
     __param(0, (0, common_1.Param)('id', new common_1.ParseUUIDPipe())),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
-], CategoriesController.prototype, "getUser", null);
+], CategoriesController.prototype, "getCategory", null);
 exports.CategoriesController = CategoriesController = __decorate([
+    (0, swagger_1.ApiTags)('Categories'),
     (0, common_1.Controller)('categories'),
     __metadata("design:paramtypes", [categories_service_1.CategoriesService,
         categories_seeder_1.CategorySeeder])
