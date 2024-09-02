@@ -1,6 +1,6 @@
 import { EntityManager } from "typeorm";
 import { Category } from "./categories.entity";
-import { Injectable } from "@nestjs/common";
+import { BadRequestException, Injectable } from "@nestjs/common";
 
 @Injectable()
 export class CategoriesRepository {
@@ -20,6 +20,17 @@ export class CategoriesRepository {
         });
 
         return this.entityManager.save(Category, newCategories);
+    }
+
+    async createCategory(categoryDto: { name: string }): Promise<Category> {
+        const existingCategory = await this.entityManager.findOne(Category, { where: { name: categoryDto.name } });
+        
+        if (existingCategory) {
+            throw new BadRequestException('La categoria ya existe');
+        }
+        // Crear nueva categoría
+        const newCategory = this.entityManager.create(Category, { name: categoryDto.name });
+        return this.entityManager.save(Category, newCategory);
     }
 
     async getCategories(): Promise<Category[]> {

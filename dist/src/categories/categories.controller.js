@@ -16,23 +16,16 @@ exports.CategoriesController = void 0;
 const openapi = require("@nestjs/swagger");
 const common_1 = require("@nestjs/common");
 const categories_service_1 = require("./categories.service");
-const categories_seeder_1 = require("./categories.seeder");
 const auth_guard_1 = require("../../guard/auth.guard");
 const class_validator_1 = require("class-validator");
 const swagger_1 = require("@nestjs/swagger");
+const category_dto_1 = require("./dto/category.dto");
 let CategoriesController = class CategoriesController {
-    constructor(categoriesService, categoriesSeeder) {
+    constructor(categoriesService) {
         this.categoriesService = categoriesService;
-        this.categoriesSeeder = categoriesSeeder;
     }
-    async seedCategories(categories) {
-        try {
-            await this.categoriesSeeder.seedCategory(categories);
-            return { message: 'Categories seeded successfully' };
-        }
-        catch (error) {
-            return { message: 'Error seeding categories', error };
-        }
+    async createCategory(createCategoryDto) {
+        return this.categoriesService.createCategory(createCategoryDto);
     }
     async getCategory(id) {
         const category = await this.categoriesService.findOneById(id);
@@ -47,13 +40,14 @@ let CategoriesController = class CategoriesController {
 };
 exports.CategoriesController = CategoriesController;
 __decorate([
-    (0, common_1.Post)('seeder'),
-    openapi.ApiResponse({ status: 201, type: Object }),
+    (0, common_1.Post)(),
+    (0, common_1.HttpCode)(common_1.HttpStatus.CREATED),
+    openapi.ApiResponse({ status: common_1.HttpStatus.CREATED, type: require("./categories.entity").Category }),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Array]),
+    __metadata("design:paramtypes", [category_dto_1.CreateCategoryDto]),
     __metadata("design:returntype", Promise)
-], CategoriesController.prototype, "seedCategories", null);
+], CategoriesController.prototype, "createCategory", null);
 __decorate([
     (0, common_1.Get)(':id'),
     (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
@@ -68,7 +62,6 @@ __decorate([
 exports.CategoriesController = CategoriesController = __decorate([
     (0, swagger_1.ApiTags)('Categories'),
     (0, common_1.Controller)('categories'),
-    __metadata("design:paramtypes", [categories_service_1.CategoriesService,
-        categories_seeder_1.CategorySeeder])
+    __metadata("design:paramtypes", [categories_service_1.CategoriesService])
 ], CategoriesController);
 //# sourceMappingURL=categories.controller.js.map

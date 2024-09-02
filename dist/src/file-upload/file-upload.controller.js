@@ -20,6 +20,7 @@ const platform_express_1 = require("@nestjs/platform-express");
 const image_upload_pipe_1 = require("../pipes/image/image-upload.pipe");
 const auth_guard_1 = require("../../guard/auth.guard");
 const swagger_1 = require("@nestjs/swagger");
+const file_create_dto_1 = require("./dto/file-create.dto");
 let FileUploadController = class FileUploadController {
     constructor(fileUploadService) {
         this.fileUploadService = fileUploadService;
@@ -31,9 +32,15 @@ let FileUploadController = class FileUploadController {
 exports.FileUploadController = FileUploadController;
 __decorate([
     (0, common_1.Post)('uploadImage/:productId'),
+    (0, swagger_1.ApiBearerAuth)(),
     (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
     (0, common_1.HttpCode)(common_1.HttpStatus.OK),
     (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('file')),
+    (0, swagger_1.ApiConsumes)('multipart/form-data'),
+    (0, swagger_1.ApiBody)({
+        description: 'File upload',
+        type: file_create_dto_1.FileCreateDto,
+    }),
     openapi.ApiResponse({ status: common_1.HttpStatus.OK }),
     __param(0, (0, common_1.Param)('productId')),
     __param(1, (0, common_1.UploadedFile)(new image_upload_pipe_1.ImageUploadPipe())),

@@ -6,6 +6,9 @@ export declare class CategoriesRepository {
     addCategories(categories: {
         name: string;
     }[]): Promise<Category[]>;
+    createCategory(categoryDto: {
+        name: string;
+    }): Promise<Category>;
     getCategories(): Promise<Category[]>;
     findOneById(id: string): Promise<Category | undefined>;
 }

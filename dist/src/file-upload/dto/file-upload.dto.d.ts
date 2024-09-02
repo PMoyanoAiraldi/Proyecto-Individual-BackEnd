@@ -1,4 +1,4 @@
-export interface FileUploadDto {
+export declare class FileUploadDto {
     fieldname: string;
     originalname: string;
     mimetype: string;

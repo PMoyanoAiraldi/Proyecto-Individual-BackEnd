@@ -29,6 +29,14 @@ let CategoriesRepository = class CategoriesRepository {
         });
         return this.entityManager.save(categories_entity_1.Category, newCategories);
     }
+    async createCategory(categoryDto) {
+        const existingCategory = await this.entityManager.findOne(categories_entity_1.Category, { where: { name: categoryDto.name } });
+        if (existingCategory) {
+            throw new common_1.BadRequestException('La categoria ya existe');
+        }
+        const newCategory = this.entityManager.create(categories_entity_1.Category, { name: categoryDto.name });
+        return this.entityManager.save(categories_entity_1.Category, newCategory);
+    }
     async getCategories() {
         return this.entityManager.find(categories_entity_1.Category);
     }

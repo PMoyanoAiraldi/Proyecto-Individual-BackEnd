@@ -11,35 +11,29 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.OrderService = void 0;
 const common_1 = require("@nestjs/common");
-const users_service_1 = require("../users/users.service");
-const products_service_1 = require("../products/products.service");
 const orders_repository_1 = require("./orders.repository");
-const order_detail_service_1 = require("../orderDetail/order-detail.service");
+const response_order_dto_1 = require("./dto/response-order.dto");
 let OrderService = class OrderService {
-    constructor(orderRepository, userService, productsService, orderDetailService) {
+    constructor(orderRepository) {
         this.orderRepository = orderRepository;
-        this.userService = userService;
-        this.productsService = productsService;
-        this.orderDetailService = orderDetailService;
     }
     async createOrder(createOrderDto) {
         return this.orderRepository.addOrder(createOrderDto);
     }
     async getOrder(id) {
-        try {
-            return await this.orderRepository.getOrder(id);
+        const order = await this.orderRepository.getOrder(id);
+        if (!order.orderDetail) {
+            throw new common_1.NotFoundException('El detalle de la orden no fue encontrado');
         }
-        catch (error) {
-            throw new common_1.NotFoundException(error.message);
+        if (!order) {
+            throw new common_1.NotFoundException('La orden no fue encontrada');
         }
+        return new response_order_dto_1.OrderResponseDto(order.orderDetail);
     }
 };
 exports.OrderService = OrderService;
 exports.OrderService = OrderService = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [orders_repository_1.OrderRepository,
-        users_service_1.UsersService,
-        products_service_1.ProductsService,
-        order_detail_service_1.OrderDetailService])
+    __metadata("design:paramtypes", [orders_repository_1.OrderRepository])
 ], OrderService);
 //# sourceMappingURL=orders.service.js.map

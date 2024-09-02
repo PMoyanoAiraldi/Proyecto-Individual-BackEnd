@@ -25,15 +25,11 @@ export class ProductsService{
     }
 
     async createProduct(createProductDto: CreateProductDto): Promise<Product>{
-        const category = await this.categoriesRepository.findOneById(createProductDto.categoryId)
-        if(!category){
-            throw Error ('La categoria no fue encontrada')
-        }
-        return this.productsRepository.createProduct(createProductDto, category)
+        return this.productsRepository.createProduct(createProductDto)
     }
 
 
-    async updateProduct(id: string, updateProductDto: UpdateProductDto){
+    async updateProduct(id: string, updateProductDto: UpdateProductDto): Promise<Product>{
         return this.productsRepository.updateProduct(id, updateProductDto)
     }
 
@@ -69,7 +65,7 @@ export class ProductsService{
     }
     
 
-    async buyProduct(id: string) {
+    async buyProduct(id: string) : Promise<number>{
         const product =  await this.productsRepository.getProductById(id);
         if (!product) {
             throw new BadRequestException('Producto no encontrado');

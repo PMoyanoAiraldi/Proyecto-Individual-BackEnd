@@ -24,7 +24,7 @@ import { CloudinaryService } from "../service/cloudinary-service/cloudinary/clou
     UsersModule,
     ProductsModule, 
     OrderDetailModule],
-    providers: [OrderService,  UsersService, OrderRepository,ProductsService, ProductRepository, CategoriesRepository, FileUploadRepository, CloudinaryService],
+    providers: [OrderService,  UsersService, OrderRepository, OrderDetailRepository,ProductsService, ProductRepository, CategoriesRepository, FileUploadRepository, CloudinaryService],
     controllers: [OrderController],
 })
 export class OrderModule {}

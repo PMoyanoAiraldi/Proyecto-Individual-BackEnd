@@ -21,12 +21,9 @@ let AuthService = class AuthService {
     }
     async signIn(loginUser) {
         const user = await this.userService.findOneByEmail(loginUser.email);
-        if (!user) {
-            throw new common_1.HttpException('Usuario no encontrado', 404);
-        }
-        const isPasswordMatchin = await (0, bcrypt_1.compare)(loginUser.password, user.password);
+        const isPasswordMatchin = user && await (0, bcrypt_1.compare)(loginUser.password, user.password);
         if (!isPasswordMatchin) {
-            throw new common_1.HttpException('Credenciales incorrectas', 400);
+            throw new common_1.HttpException('Email o password incorrectos', common_1.HttpStatus.UNAUTHORIZED);
         }
         const token = await this.createToken(user);
         return { token };

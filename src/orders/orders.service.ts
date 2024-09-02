@@ -14,21 +14,25 @@ import { OrderDetailService } from "../orderDetail/order-detail.service";
 export class OrderService {
     constructor(
         private readonly orderRepository: OrderRepository,
-        private readonly userService: UsersService,
-        private readonly productsService: ProductsService,
-        private readonly orderDetailService: OrderDetailService,
     ){}
 
-    async createOrder(createOrderDto: CreateOrderDto): Promise<OrderResponseDto> {
+   //async createOrder(createOrderDto: CreateOrderDto): Promise<OrderResponseDto> {
+    async createOrder(createOrderDto: CreateOrderDto) {
         return this.orderRepository.addOrder(createOrderDto);
     }
 
-    async getOrder(id: string) {
-        try {
-            return await this.orderRepository.getOrder(id);
-        } catch (error) {
-            throw new NotFoundException(error.message);
+    async getOrder(id: string): Promise<OrderResponseDto> {
+        const order = await this.orderRepository.getOrder(id);
+
+        if ( !order.orderDetail) {
+            throw new NotFoundException('El detalle de la orden no fue encontrado');
         }
+        if (!order) {
+            throw new NotFoundException('La orden no fue encontrada');
+        }
+
+
+        return new OrderResponseDto(order.orderDetail);
     }
-    
 }
+    

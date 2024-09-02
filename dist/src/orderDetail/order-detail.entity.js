@@ -16,7 +16,7 @@ const orders_entity_1 = require("../orders/orders.entity");
 const products_entity_1 = require("../products/products.entity");
 let OrderDetail = class OrderDetail {
     static _OPENAPI_METADATA_FACTORY() {
-        return { id: { required: true, type: () => String }, price: { required: true, type: () => Number }, order: { required: true, type: () => require("../orders/orders.entity").Order }, products: { required: true, type: () => [require("../products/products.entity").Product] } };
+        return { id: { required: true, type: () => String, description: "El id del detalle de la orden", example: "e2d481f2-735e-428f-8a24-c296956dccf9" }, price: { required: true, type: () => Number, description: "El precio del producto", example: "250.50" }, order: { required: true, type: () => require("../orders/orders.entity").Order }, products: { required: true, type: () => [require("../products/products.entity").Product] } };
     }
 };
 exports.OrderDetail = OrderDetail;

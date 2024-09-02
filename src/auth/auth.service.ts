@@ -1,4 +1,4 @@
-import { HttpException, Injectable, InternalServerErrorException, UnauthorizedException } from "@nestjs/common";
+import { HttpException, HttpStatus, Injectable, InternalServerErrorException, UnauthorizedException } from "@nestjs/common";
 import { hash, compare} from 'bcrypt'
 import { UsersService } from "../users/users.service";
 import { LoginUserDto } from "./dto/login-user.dto";
@@ -13,17 +13,16 @@ export class AuthService{
         private readonly jwtService: JwtService
     ){}
 
-    async signIn(loginUser: LoginUserDto){
+    async signIn(loginUser: LoginUserDto): Promise<{token: string}>{
         const user = await this.userService.findOneByEmail(loginUser.email);
 
-        if(!user){
-            throw new HttpException('Usuario no encontrado', 404)
+        // Validar si el usuario existe y si la contraseña es correcta
+        const isPasswordMatchin = user && await compare(loginUser.password, user.password) //comparamos la contraseña hasheada con la contraseña del usuario
+        
+        if(!isPasswordMatchin){
+            throw new HttpException('Email o password incorrectos', HttpStatus.UNAUTHORIZED)
         }
 
-        const isPasswordMatchin = await compare(loginUser.password, user.password) //comparamos la contraseña hasheada con la contraseña del usuario
-        if(!isPasswordMatchin){
-            throw new HttpException('Credenciales incorrectas', 400)
-        }
         const token = await this.createToken(user);
         return {token}
 

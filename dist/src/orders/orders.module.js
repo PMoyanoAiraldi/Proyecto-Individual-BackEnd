@@ -18,6 +18,7 @@ const users_entity_1 = require("../users/users.entity");
 const users_module_1 = require("../users/users.module");
 const products_module_1 = require("../products/products.module");
 const order_detail_module_1 = require("../orderDetail/order-detail.module");
+const order_detail_repository_1 = require("../orderDetail/order-detail.repository");
 const orders_repository_1 = require("./orders.repository");
 const users_service_1 = require("../users/users.service");
 const products_service_1 = require("../products/products.service");
@@ -34,7 +35,7 @@ exports.OrderModule = OrderModule = __decorate([
             users_module_1.UsersModule,
             products_module_1.ProductsModule,
             order_detail_module_1.OrderDetailModule],
-        providers: [orders_service_1.OrderService, users_service_1.UsersService, orders_repository_1.OrderRepository, products_service_1.ProductsService, products_repository_1.ProductRepository, categories_repository_1.CategoriesRepository, file_upload_repository_1.FileUploadRepository, cloudinary_service_1.CloudinaryService],
+        providers: [orders_service_1.OrderService, users_service_1.UsersService, orders_repository_1.OrderRepository, order_detail_repository_1.OrderDetailRepository, products_service_1.ProductsService, products_repository_1.ProductRepository, categories_repository_1.CategoriesRepository, file_upload_repository_1.FileUploadRepository, cloudinary_service_1.CloudinaryService],
         controllers: [orders_controller_1.OrderController],
     })
 ], OrderModule);

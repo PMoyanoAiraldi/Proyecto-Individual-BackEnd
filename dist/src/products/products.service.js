@@ -26,11 +26,7 @@ let ProductsService = class ProductsService {
         return await this.productsRepository.getProductById(id);
     }
     async createProduct(createProductDto) {
-        const category = await this.categoriesRepository.findOneById(createProductDto.categoryId);
-        if (!category) {
-            throw Error('La categoria no fue encontrada');
-        }
-        return this.productsRepository.createProduct(createProductDto, category);
+        return this.productsRepository.createProduct(createProductDto);
     }
     async updateProduct(id, updateProductDto) {
         return this.productsRepository.updateProduct(id, updateProductDto);

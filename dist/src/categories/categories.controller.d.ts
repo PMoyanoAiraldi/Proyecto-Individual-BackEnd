@@ -1,17 +1,9 @@
 import { CategoriesService } from "./categories.service";
-import { CategorySeeder } from "./categories.seeder";
+import { Category } from "./categories.entity";
+import { CreateCategoryDto } from "./dto/category.dto";
 export declare class CategoriesController {
     private readonly categoriesService;
-    private readonly categoriesSeeder;
-    constructor(categoriesService: CategoriesService, categoriesSeeder: CategorySeeder);
-    seedCategories(categories: {
-        name: string;
-    }[]): Promise<{
-        message: string;
-        error?: undefined;
-    } | {
-        message: string;
-        error: any;
-    }>;
-    getCategory(id: string): Promise<import("./categories.entity").Category>;
+    constructor(categoriesService: CategoriesService);
+    createCategory(createCategoryDto: CreateCategoryDto): Promise<Category>;
+    getCategory(id: string): Promise<Category>;
 }

@@ -17,7 +17,6 @@ const openapi = require("@nestjs/swagger");
 const common_1 = require("@nestjs/common");
 const orders_service_1 = require("./orders.service");
 const create_order_dto_1 = require("./dto/create-order.dto");
-const class_validator_1 = require("class-validator");
 const auth_guard_1 = require("../../guard/auth.guard");
 const swagger_1 = require("@nestjs/swagger");
 let OrderController = class OrderController {
@@ -29,9 +28,6 @@ let OrderController = class OrderController {
     }
     async getOrder(id) {
         const order = await this.ordersService.getOrder((id));
-        if (!(0, class_validator_1.IsUUID)(4, { each: true })) {
-            throw new common_1.HttpException('UUID inválido', common_1.HttpStatus.BAD_REQUEST);
-        }
         if (!order) {
             throw new common_1.HttpException('La orden no fue encontrada', common_1.HttpStatus.NOT_FOUND);
         }

@@ -16,7 +16,7 @@ const categories_entity_1 = require("../categories/categories.entity");
 const order_detail_entity_1 = require("../orderDetail/order-detail.entity");
 let Product = class Product {
     static _OPENAPI_METADATA_FACTORY() {
-        return { id: { required: true, type: () => String }, name: { required: true, type: () => String }, description: { required: true, type: () => String }, price: { required: true, type: () => Number }, stock: { required: true, type: () => Number }, imgUrl: { required: true, type: () => String }, category: { required: true, type: () => require("../categories/categories.entity").Category }, orderDetails: { required: true, type: () => [require("../orderDetail/order-detail.entity").OrderDetail] } };
+        return { id: { required: true, type: () => String, description: "El id del producto", example: "e2d481f2-735e-428f-8a24-c296956dccf9" }, name: { required: true, type: () => String, description: "El nombre del producto", example: "Samsung Galaxy" }, description: { required: true, type: () => String, description: "La descripci\u00F3n del producto", example: "The best smartphone in the world" }, price: { required: true, type: () => Number, description: "El precio del producto", example: "250.50" }, stock: { required: true, type: () => Number, description: "La cantidad disponible de ese producto", example: "15" }, imgUrl: { required: true, type: () => String, description: "La url de la imagen del producto", example: "default-image-url.jpg" }, category: { required: true, type: () => require("../categories/categories.entity").Category }, orderDetails: { required: true, type: () => [require("../orderDetail/order-detail.entity").OrderDetail] } };
     }
 };
 exports.Product = Product;
@@ -41,7 +41,7 @@ __decorate([
     __metadata("design:type", Number)
 ], Product.prototype, "stock", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ type: 'text', default: 'default-image-url.jpg' }),
+    (0, typeorm_1.Column)({ default: 'default-image-url.jpg' }),
     __metadata("design:type", String)
 ], Product.prototype, "imgUrl", void 0);
 __decorate([

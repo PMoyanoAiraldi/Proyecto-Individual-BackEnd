@@ -19,6 +19,9 @@ let CategoriesService = class CategoriesService {
     async seedCategories(categories) {
         return this.categoryRepository.addCategories(categories);
     }
+    async createCategory(createCategoryDto) {
+        return this.categoryRepository.createCategory(createCategoryDto);
+    }
     async getCategories() {
         return this.categoryRepository.getCategories();
     }

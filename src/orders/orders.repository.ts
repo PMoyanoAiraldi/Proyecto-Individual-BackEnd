@@ -1,4 +1,4 @@
-import { Repository } from "typeorm";
+import { EntityManager, QueryFailedError, Repository } from "typeorm";
 import { Order } from "./orders.entity";
 import { InjectRepository } from "@nestjs/typeorm";
 import { OrderDetailRepository } from "../orderDetail/order-detail.repository";
@@ -9,68 +9,85 @@ import { CreateOrderDetailDto } from "../orderDetail/dto/create-order-detail.dto
 import { OrderResponseDto } from "./dto/response-order.dto";
 import { OrderDetail } from "../orderDetail/order-detail.entity";
 import { User } from "../users/users.entity";
-import { NotFoundException } from "@nestjs/common";
+import { ConflictException, Injectable, NotFoundException } from "@nestjs/common";
 
+
+@Injectable()
 export class OrderRepository {
     constructor(
-    @InjectRepository(Order)
-    private readonly orderRepository: Repository<Order>,
-    @InjectRepository(OrderDetail)
-    private readonly orderDetailRepository: Repository<OrderDetail>,
-    @InjectRepository(User)
-    private readonly userRepository: Repository<User>,
-    private readonly productService: ProductsService
-    ){ }
+        private readonly entityManager: EntityManager,
+        private readonly productService: ProductsService
+    ){}
 
     async addOrder(createOrderDto: CreateOrderDto): Promise<OrderResponseDto>{
+        
+        try{
         const {userId, products} = createOrderDto;
 
-        const user = await this.userRepository.findOne({// Busca el usuario por ID incluyendo las órdenes ya realizadas
+        const user = await this.entityManager.findOne(User,{// Busca el usuario por ID incluyendo las órdenes ya realizadas
             where: {id: userId},
-            relations: ['orders'], // Incluye las órdenes del usuario
-        })
-
+    })
+    
         if (!user) {
-            throw new Error(`El usuario con ID ${userId} no fue encontrado`);
+            throw new NotFoundException(`El usuario con ID ${userId} no fue encontrado`);
         }
 
-        const order = this.orderRepository.create({ //creamos la orden
-            user: user,
-            date: new Date(),
-        });
-
-        const orderEntity = await this.orderRepository.save(order); //guardamos la orden orderEntity
         const total = await this.calculateTotal(products)
+
+        const orderEntity = await this.entityManager.save(Order,
+            {
+                user: user,
+                date: new Date(),
+            } 
+            ); 
+        console.log('orderEntity',orderEntity)
 
         const orderDetail = new CreateOrderDetailDto();//creamos y guardamos el detalle de la orden
         orderDetail.price = total;
         orderDetail.products = products;
         orderDetail.order = orderEntity;
 
-        const orderDetailEntity = await this.orderDetailRepository.save(orderDetail);
 
-        return new OrderResponseDto(orderDetailEntity);
+        const orderDetailEntity = await this.entityManager.save(OrderDetail, orderDetail);
+
+        console.log(orderDetailEntity)
+
+        return orderDetailEntity;
+    } catch (error) {
+        if (error instanceof QueryFailedError && error.message.includes('llave duplicada viola restricción de unicidad')) {
+            throw new ConflictException('No se puede agregar el mismo producto más de una vez en la orden.');
+        }
+        throw error;
+    }
     }
 
     private async calculateTotal (products: Array<ProductId>): Promise<number>{
         let total = 0;
         for(const product of products){
-            total += await this.productService.buyProduct(product.id)
+            const productPrice = await this.productService.buyProduct(product.id)
+            console.log('productPrice',typeof productPrice)
+            total += Number(productPrice);
+
+            console.log('total',typeof total)
         }
         return total;
+        
     }
 
 
-    async getOrder(id: string): Promise<OrderResponseDto>{
-        const order = await this.orderRepository.findOne({//obtener la orden con sus detalles, productos y usuario relacionados
+    async getOrder(id: string): Promise<Order>{
+        const order = await this.entityManager.findOne(Order,{
             where: { id },
-            relations: ['orderDetail', 'orderDetail.products', 'user']
+            relations: ['orderDetail', 'orderDetail.products', 'orderDetail.order.user']
         });
 
         if (!order) {
             throw new NotFoundException('La orden no fue encontrada');
         }
-
-        return new OrderResponseDto(order.orderDetail);
+        
+        return order;
     }
+
+    
 }
+

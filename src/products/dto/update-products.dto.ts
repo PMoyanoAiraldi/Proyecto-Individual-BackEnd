@@ -1,29 +1,52 @@
-// import { IsNumber, IsString } from "class-validator";
+import { IsNumber, IsOptional, IsString } from "class-validator";
 
-// export class UpdateProductDto{    
-//             @IsString()
-//             name: string;
+export class UpdateProductDto{   
     
-//             @IsString()
-//             description: string;
-    
-//             @IsNumber()
-//             price: number;
-    
-//             @IsNumber()
-//             stock: number;
-    
-//             @IsString()
-//             imgUrl: string;
+            /**
+            * El nombre del producto
+            * @example 'Samsung Galaxy'
+            */
+            @IsString()
+            @IsOptional()
+            name?: string;
     
 
-//             constructor(partial: Partial<UpdateProductDto>){ 
-//                 const {stock} = partial;
-//                 this.stock = stock;
-//             }
-// }
+            /**
+            * La descripción del producto
+            * @example 'The best smartphone in the world'
+            */
+            @IsString()
+            @IsOptional()
+            description?: string;
+    
 
-import { PartialType } from '@nestjs/mapped-types';
-import { CreateProductDto } from './create-product.dto'; // Asegúrate de tener un DTO base para crear productos
+            /**
+            * El precio del producto
+            * @example '250.50'
+            */
+            @IsNumber()
+            @IsOptional()
+            price?: number;
+    
 
-export class UpdateProductDto extends PartialType(CreateProductDto) {}
+            /**
+            * La cantidad disponible de ese producto
+            * @example '15'
+            */
+            @IsNumber()
+            @IsOptional()
+            stock?: number;
+    
+
+            /**
+            * La url de la imagen del producto
+            * @example 'default-image-url.jpg'
+            */
+            @IsString()
+            @IsOptional()
+            imgUrl?: string;
+    
+
+}
+
+

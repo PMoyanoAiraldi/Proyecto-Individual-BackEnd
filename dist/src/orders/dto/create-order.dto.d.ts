@@ -1,4 +1,4 @@
-export interface ProductId {
+export declare class ProductId {
     id: string;
 }
 export declare class CreateOrderDto {

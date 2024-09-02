@@ -14,7 +14,7 @@ const openapi = require("@nestjs/swagger");
 const class_validator_1 = require("class-validator");
 class CreateProductDto {
     static _OPENAPI_METADATA_FACTORY() {
-        return { name: { required: true, type: () => String }, description: { required: true, type: () => String }, price: { required: true, type: () => Number }, stock: { required: true, type: () => Number }, imgUrl: { required: true, type: () => String }, categoryId: { required: true, type: () => String } };
+        return { name: { required: true, type: () => String, description: "El nombre del producto", example: "Samsung Galaxy" }, description: { required: true, type: () => String, description: "La descripci\u00F3n del producto", example: "The best smartphone in the world" }, price: { required: true, type: () => Number, description: "El precio del producto", example: "250.50" }, stock: { required: true, type: () => Number, description: "La cantidad disponible de ese producto", example: "15" }, imgUrl: { required: true, type: () => String, description: "La url de la imagen del producto", example: "default-image-url.jpg" }, categoryId: { required: true, type: () => String, description: "El id de la categoria a la que pertenece el producto", example: "e2d481f2-735e-428f-8a24-c296956dccf9" } };
     }
 }
 exports.CreateProductDto = CreateProductDto;

@@ -14,7 +14,7 @@ const openapi = require("@nestjs/swagger");
 const class_validator_1 = require("class-validator");
 class LoginUserDto {
     static _OPENAPI_METADATA_FACTORY() {
-        return { email: { required: true, type: () => String }, password: { required: true, type: () => String } };
+        return { email: { required: true, type: () => String, description: "Debe ser un email v\u00E1lido", example: "ejemplo@mail.com" }, password: { required: true, type: () => String, description: "La contrase\u00F1a debe contener al menos una letra min\u00FAscula, una letra may\u00FAscula, un n\u00FAmero y un car\u00E1cter especial (!@#$%^&*)", example: "Ejemplo*1" } };
     }
 }
 exports.LoginUserDto = LoginUserDto;

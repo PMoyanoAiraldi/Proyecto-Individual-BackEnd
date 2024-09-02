@@ -25,9 +25,6 @@ export class OrderController{
     @HttpCode(HttpStatus.OK)
     async getOrder(@Param('id', new ParseUUIDPipe()) id: string){
         const order = await this.ordersService.getOrder((id))
-        if(!IsUUID(4, { each: true})){
-            throw new HttpException('UUID inválido', HttpStatus.BAD_REQUEST)
-        }
         if(!order){
             throw new HttpException('La orden no fue encontrada', HttpStatus.NOT_FOUND)
         }

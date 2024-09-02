@@ -15,15 +15,9 @@ import { ApiQuery, ApiSecurity, ApiTags } from "@nestjs/swagger";
 export class ProductsController{
     constructor(private readonly productsService: ProductsService) {} 
 
-    @Post('seeder')
-    @HttpCode(HttpStatus.CREATED)
-    async seedProducts(@Body() products: Product[]){
-        return this.productsService.seedProducts(products)
-    }
-
     @Post()
     @HttpCode(HttpStatus.CREATED)
-    async createProducts(@Body() CreateProductDto: CreateProductDto){
+    async createProducts(@Body() CreateProductDto: CreateProductDto): Promise<Product>{
         return await this.productsService.createProduct(CreateProductDto)
     }
 
@@ -40,7 +34,7 @@ export class ProductsController{
 
     @Get(':id')
     @HttpCode(HttpStatus.OK)
-    async getProduct(@Param('id', new ParseUUIDPipe()) id: string){
+    async getProduct(@Param('id', new ParseUUIDPipe()) id: string): Promise<Product>{
         const product = await this.productsService.getProduct((id))
         if(!IsUUID(4, { each: true})){
             throw new HttpException('UUID inválido', HttpStatus.BAD_REQUEST)

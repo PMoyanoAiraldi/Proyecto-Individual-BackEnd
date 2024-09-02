@@ -27,9 +27,6 @@ let ProductsController = class ProductsController {
     constructor(productsService) {
         this.productsService = productsService;
     }
-    async seedProducts(products) {
-        return this.productsService.seedProducts(products);
-    }
     async createProducts(CreateProductDto) {
         return await this.productsService.createProduct(CreateProductDto);
     }
@@ -54,15 +51,6 @@ let ProductsController = class ProductsController {
     }
 };
 exports.ProductsController = ProductsController;
-__decorate([
-    (0, common_1.Post)('seeder'),
-    (0, common_1.HttpCode)(common_1.HttpStatus.CREATED),
-    openapi.ApiResponse({ status: common_1.HttpStatus.CREATED }),
-    __param(0, (0, common_1.Body)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Array]),
-    __metadata("design:returntype", Promise)
-], ProductsController.prototype, "seedProducts", null);
 __decorate([
     (0, common_1.Post)(),
     (0, common_1.HttpCode)(common_1.HttpStatus.CREATED),

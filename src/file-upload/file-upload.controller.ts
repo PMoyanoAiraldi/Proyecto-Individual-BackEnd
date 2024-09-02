@@ -4,7 +4,8 @@ import { ProductsService } from '../products/products.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ImageUploadPipe } from '../pipes/image/image-upload.pipe';
 import { AuthGuard } from 'ecommerce-PMoyanoAiraldi/guard/auth.guard';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
+import { FileCreateDto } from './dto/file-create.dto';
 
 
 @ApiTags('Files')
@@ -13,9 +14,15 @@ export class FileUploadController {
   constructor( private readonly fileUploadService: FileUploadService ) {}
 
 @Post('uploadImage/:productId')
+@ApiBearerAuth()
 @UseGuards(AuthGuard)
 @HttpCode(HttpStatus.OK)
 @UseInterceptors(FileInterceptor('file'))
+@ApiConsumes('multipart/form-data')
+@ApiBody({
+  description: 'File upload',
+  type: FileCreateDto, // Especifica el tipo de DTO que espera Swagger
+})
 async uploadFile(
   @Param('productId') productId: string, 
   @UploadedFile(new ImageUploadPipe()) file: Express.Multer.File

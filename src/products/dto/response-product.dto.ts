@@ -1,17 +1,19 @@
+import { IsNumber, IsString } from "class-validator";
+
 export class responseProductDto{
+    @IsString()
     name: string;
+
+    @IsString()
     description: string;
+
+    @IsNumber()
     price: number;
+
+    @IsNumber()
     stock: number;
+
+    @IsString()
     imgUrl: string;
 
-    // constructor(partial: Partial<responseProductDto>){ //significa que puede venir otras propiedades o menos de las que declaro
-    //     const {name, description, price, stock, imgUrl} = partial;
-    //     this.name = name;
-    //     this.description = description;
-    //     this.price = price;
-    //     this.stock = stock;
-    //     this.imgUrl = imgUrl;
-    
-    // }
 }

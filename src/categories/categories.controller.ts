@@ -4,6 +4,8 @@ import { CategorySeeder } from "./categories.seeder";
 import { AuthGuard } from "ecommerce-PMoyanoAiraldi/guard/auth.guard";
 import { IsUUID } from "class-validator";
 import { ApiSecurity, ApiTags } from "@nestjs/swagger";
+import { Category } from "./categories.entity";
+import { CreateCategoryDto } from "./dto/category.dto";
 
 
 @ApiTags('Categories')
@@ -11,18 +13,15 @@ import { ApiSecurity, ApiTags } from "@nestjs/swagger";
 export class CategoriesController{
     constructor(
         private readonly categoriesService: CategoriesService,
-        private readonly categoriesSeeder: CategorySeeder
+        
     ){}
 
-    @Post('seeder')
-    async seedCategories(@Body() categories: { name: string}[]){
-        try {
-            await this.categoriesSeeder.seedCategory(categories);
-            return { message: 'Categories seeded successfully' };
-        } catch (error) {
-            return { message: 'Error seeding categories', error };
-        }
-    }
+    @Post()
+    @HttpCode(HttpStatus.CREATED)
+    async createCategory(@Body() createCategoryDto: CreateCategoryDto): Promise<Category> {
+    return this.categoriesService.createCategory(createCategoryDto);
+}
+
 
     @Get(':id')
     @UseGuards(AuthGuard)
