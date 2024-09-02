@@ -1,6 +1,4 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
-import { CategoriesService } from './categories.service';
-import { InjectRepository } from '@nestjs/typeorm';
 import { CategoriesRepository } from './categories.repository';
 import { categoriesData } from './categories.data';
 import { Category } from './categories.entity';

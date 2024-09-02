@@ -1,6 +1,5 @@
 import { Controller, HttpCode, HttpStatus, Param, Post, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { FileUploadService } from './file-upload.service';
-import { ProductsService } from '../products/products.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ImageUploadPipe } from '../pipes/image/image-upload.pipe';
 import { AuthGuard } from 'ecommerce-PMoyanoAiraldi/guard/auth.guard';
@@ -21,7 +20,7 @@ export class FileUploadController {
 @ApiConsumes('multipart/form-data')
 @ApiBody({
   description: 'File upload',
-  type: FileCreateDto, // Especifica el tipo de DTO que espera Swagger
+  type: FileCreateDto, 
 })
 async uploadFile(
   @Param('productId') productId: string, 

@@ -1,7 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { CategoriesRepository } from "./categories.repository";
 import { Category } from "./categories.entity";
-import { InjectRepository } from "@nestjs/typeorm";
 import { CreateCategoryDto } from "./dto/category.dto";
 
 @Injectable()

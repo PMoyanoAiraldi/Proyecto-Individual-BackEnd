@@ -13,9 +13,9 @@ import { UserWithAdminDto } from "./dto/admin-user.dto";
 import { ApiBasicAuth, ApiBearerAuth, ApiQuery, ApiSecurity, ApiTags } from "@nestjs/swagger";
 
 @ApiTags('Users')
-@Controller('users') //al colocar como parámetro 'users', define que la ruta será /users
+@Controller('users') 
 export class UsersController{
-    constructor(private readonly usersService: UsersService) {} //crea una propiedad privada de tipo UsersService que se va a llamar usersService que lo puedo usar en dentro de los otros métodos
+    constructor(private readonly usersService: UsersService) {}
 
 
     @Get()  

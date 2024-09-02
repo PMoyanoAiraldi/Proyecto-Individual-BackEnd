@@ -1,9 +1,7 @@
 import { DataSource, DataSourceOptions } from "typeorm";
 import * as dotenv from 'dotenv';
 import { registerAs } from "@nestjs/config";
-// import { join } from 'path';
 
-// dotenvConfig({ path: join(__dirname, '..', 'back', 'e-commerce-PMoyanoAiraldi', '.env.development') });
 
 dotenv.config({ path: '../.env.development'});
 

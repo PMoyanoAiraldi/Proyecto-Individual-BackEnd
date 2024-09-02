@@ -11,7 +11,7 @@ async function bootstrap() {
     app.use(logger_middleware_1.loggerGlobal);
     const swaggerConfig = new swagger_1.DocumentBuilder()
         .setTitle('Ecommerce de productos tecnológicos')
-        .setDescription('Esta API permite la creación,  actualización y eliminación de productos como teclados, smartphones, mouses, y monitores, así como la gestión de usuarios, órdenes de compra, y manejo de inventario. Ideal para desarrolladores que buscan integrar funcionalidades de comercio electrónico en sus aplicaciones.')
+        .setDescription('Esta API permite la creación,  actualización y eliminación de productos como teclados, smartphones, mouses, y monitores, así como la gestión de usuarios y órdenes de compra. Ideal para desarrolladores que buscan integrar funcionalidades de comercio electrónico en sus aplicaciones.')
         .setVersion('1.0.0')
         .addBearerAuth()
         .build();

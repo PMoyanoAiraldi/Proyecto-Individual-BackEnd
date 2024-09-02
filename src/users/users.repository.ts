@@ -1,9 +1,9 @@
 import * as bcrypt from 'bcrypt';
 import { CreateUserDto } from "./dto/create-user.dto";
 import { updateUserDto } from "./dto/update-user.dto";
-import { InjectEntityManager, InjectRepository } from "@nestjs/typeorm";
+import { InjectEntityManager } from "@nestjs/typeorm";
 import { User } from "./users.entity";
-import { EntityManager, Repository } from "typeorm";
+import { EntityManager } from "typeorm";
 import { UserWithAdminDto } from "./dto/admin-user.dto";
 
 
@@ -14,13 +14,11 @@ export class UsersRepository {
     ){}
 
     async getUsers(page: number, limit: number): Promise<UserWithAdminDto[]> {
-        const offset = (page - 1) * limit; //Es el número de registros a omitir (saltar) para empezar a recuperar los resultados desde una posición específica 
-        //Por ejemplo: offset = (1 - 1) * 5 = 0
-        //Recuperas los primeros 5 registros (LIMIT 5 OFFSET 0)
+        const offset = (page - 1) * limit; 
 
         const users = await this.entityManager.find(User,{
-            skip: offset,// Salta los primeros resultados según el offset
-            take: limit // Limita el número de resultados
+            skip: offset,
+            take: limit 
         })
         
         return users.map(user => {
@@ -60,14 +58,14 @@ export class UsersRepository {
         if(!user){
             throw new Error(`El usuario con ${id} no fue encontrado`);
         }
-        // Verifica si se está actualizando la contraseña
+        
         if (userUpdate.password) {
-        // Hashea la nueva contraseña
+        
         const salt = await bcrypt.genSalt(10);
         userUpdate.password = await bcrypt.hash(userUpdate.password, salt);
     }
 
-        Object.assign(user, userUpdate);// Actualiza las propiedades del usuario con los datos del DTO
+        Object.assign(user, userUpdate);
         await this.entityManager.save(user)
         return user;
     }

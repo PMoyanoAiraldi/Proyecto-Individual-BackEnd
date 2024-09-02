@@ -16,7 +16,7 @@ export class ProductSeeder implements OnModuleInit{
     ) {}
 
     async onModuleInit() {
-        await this.categorySeeder.onModuleInit(); // Asegúrate de que las categorías se carguen primero
+        await this.categorySeeder.onModuleInit();
         await this.seedProducts();
     }
 
@@ -25,7 +25,7 @@ export class ProductSeeder implements OnModuleInit{
         const newProducts = productData.map(productData => {
             const category = categories.find(cat => cat.name === productData.category);
             if (!category) {
-            throw new Error(`Category '${productData.category}' not found`);
+            throw new Error(`La categoria '${productData.category}' no fue encontrada`);
         }
             const product = new Product;
             product.name = productData.name;

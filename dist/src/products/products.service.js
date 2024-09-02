@@ -40,7 +40,7 @@ let ProductsService = class ProductsService {
         for (const productData of products) {
             const category = categories.find(cat => cat.name === productData.category.name);
             if (!category) {
-                throw new common_1.BadRequestException(`Category '${productData.category.name}' not found`);
+                throw new common_1.BadRequestException(`La categoria '${productData.category.name}' no fue encontrada`);
             }
             const exists = await this.productsRepository.getProductByName(productData.name);
             if (!exists) {

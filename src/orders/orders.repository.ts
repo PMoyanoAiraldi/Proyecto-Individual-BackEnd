@@ -1,10 +1,7 @@
 import { EntityManager, QueryFailedError, Repository } from "typeorm";
 import { Order } from "./orders.entity";
-import { InjectRepository } from "@nestjs/typeorm";
-import { OrderDetailRepository } from "../orderDetail/order-detail.repository";
 import { ProductsService } from "../products/products.service";
 import { CreateOrderDto, ProductId } from "./dto/create-order.dto";
-import { UsersService } from "../users/users.service";
 import { CreateOrderDetailDto } from "../orderDetail/dto/create-order-detail.dto";
 import { OrderResponseDto } from "./dto/response-order.dto";
 import { OrderDetail } from "../orderDetail/order-detail.entity";
@@ -24,7 +21,7 @@ export class OrderRepository {
         try{
         const {userId, products} = createOrderDto;
 
-        const user = await this.entityManager.findOne(User,{// Busca el usuario por ID incluyendo las órdenes ya realizadas
+        const user = await this.entityManager.findOne(User,{
             where: {id: userId},
     })
     
@@ -42,7 +39,7 @@ export class OrderRepository {
             ); 
         console.log('orderEntity',orderEntity)
 
-        const orderDetail = new CreateOrderDetailDto();//creamos y guardamos el detalle de la orden
+        const orderDetail = new CreateOrderDetailDto();
         orderDetail.price = total;
         orderDetail.products = products;
         orderDetail.order = orderEntity;

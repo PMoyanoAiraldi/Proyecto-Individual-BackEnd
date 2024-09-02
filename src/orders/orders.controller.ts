@@ -1,8 +1,6 @@
 import { Body, Controller, Get, HttpCode, HttpException, HttpStatus, Param, ParseUUIDPipe, Post, UseGuards } from "@nestjs/common";
 import { OrderService } from "./orders.service";
-import { Order } from "./orders.entity";
 import { CreateOrderDto } from "./dto/create-order.dto";
-import { IsUUID } from "class-validator";
 import { AuthGuard } from "ecommerce-PMoyanoAiraldi/guard/auth.guard";
 import { ApiSecurity, ApiTags } from "@nestjs/swagger";
 

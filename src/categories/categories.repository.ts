@@ -8,9 +8,8 @@ export class CategoriesRepository {
     
     async addCategories(categories: { name: string }[]): Promise<Category[]> {
         const existingCategories = await this.getCategories();
-        const existingCategoryNames = new Set(existingCategories.map(cat => cat.name)); //verifica los nombres existentes con Set
+        const existingCategoryNames = new Set(existingCategories.map(cat => cat.name)); 
 
-        // Convertimos los datos en instancias de Category y filtramos los duplicados
         const newCategories = categories
         .filter(category => !existingCategoryNames.has(category.name))
         .map(category => {
@@ -28,13 +27,12 @@ export class CategoriesRepository {
         if (existingCategory) {
             throw new BadRequestException('La categoria ya existe');
         }
-        // Crear nueva categoría
+        
         const newCategory = this.entityManager.create(Category, { name: categoryDto.name });
         return this.entityManager.save(Category, newCategory);
     }
 
     async getCategories(): Promise<Category[]> {
-        //console.log('CategoriesRepository:', this);
         return this.entityManager.find(Category)
     }
 

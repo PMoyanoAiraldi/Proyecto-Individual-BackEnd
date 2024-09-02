@@ -1,12 +1,8 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
-import UserDto from "./dto/response-user.dto";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { updateUserDto } from "./dto/update-user.dto";
-import { InjectRepository } from "@nestjs/typeorm";
 import { User } from "./users.entity";
-import { Repository } from "typeorm";
 import { UsersRepository } from "./users.repository";
-import UserResponseDto from "./dto/response-user.dto";
 import { UserWithAdminDto } from "./dto/admin-user.dto";
 
 

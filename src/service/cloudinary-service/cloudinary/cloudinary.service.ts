@@ -18,9 +18,9 @@ export class CloudinaryService {
 
     async uploadFile(buffer: Buffer, originalName?: string): Promise<string>{
         const options: UploadApiOptions = {
-            folder: 'upload', //nombre de la carpeta que se va a subir el archivo, si no esta creada la crea automaticamente
+            folder: 'upload', 
             public_id: originalName,
-            resource_type: 'auto' //si es png o jpg, que lo deduzca automaticamente
+            resource_type: 'auto' 
         }
 
         return new Promise((resolve, reject) => {

@@ -4,8 +4,7 @@ import { CreateProductDto } from "./dto/create-product.dto";
 import { UpdateProductDto } from "./dto/update-products.dto";
 import { CategoriesRepository } from "../categories/categories.repository";
 import { Product } from "./products.entity";
-import { FileUploadRepository } from "../file-upload/file-upload.repository";
-import { FileUploadDto } from "../file-upload/dto/file-upload.dto";
+
 
 @Injectable()
 export class ProductsService{
@@ -45,7 +44,7 @@ export class ProductsService{
         for (const productData of products) {
             const category = categories.find(cat => cat.name === productData.category.name);
             if (!category) {
-                throw new BadRequestException(`Category '${productData.category.name}' not found`);
+                throw new BadRequestException(`La categoria '${productData.category.name}' no fue encontrada`);
             }
 
             const exists = await this.productsRepository.getProductByName(productData.name);
@@ -75,12 +74,12 @@ export class ProductsService{
             throw new BadRequestException ("Stock agotado")
         }
 
-        // Crear instancia de UpdateProductDto
+
         const updateProductDto: UpdateProductDto = {
             stock: product.stock - 1,
         };
 
-        try{// Actualizar stock del producto
+        try{
             await this.productsRepository.updateProduct(id, updateProductDto);
         }catch (error) {
             throw new BadRequestException('Error al actualizar el producto');

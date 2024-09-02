@@ -31,7 +31,7 @@ let ProductSeeder = class ProductSeeder {
         const newProducts = products_data_1.productData.map(productData => {
             const category = categories.find(cat => cat.name === productData.category);
             if (!category) {
-                throw new Error(`Category '${productData.category}' not found`);
+                throw new Error(`La categoria '${productData.category}' no fue encontrada`);
             }
             const product = new products_entity_1.Product;
             product.name = productData.name;

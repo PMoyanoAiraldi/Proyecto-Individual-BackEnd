@@ -17,8 +17,4 @@ export class OrderDetailService{
     async getOrderDetailsByOrderId(orderId: string, relations: string[] = []): Promise<OrderDetail[]> {
         return this.orderDetailRepository.findOneByOrderId(orderId, relations);
     }
-
-
-
-
 }

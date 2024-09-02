@@ -1,4 +1,4 @@
-import { CanActivate, ExecutionContext, HttpException, HttpStatus, Injectable, UnauthorizedException } from '@nestjs/common';
+import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
@@ -14,7 +14,7 @@ export class AuthGuard implements CanActivate {
   async canActivate(
     context: ExecutionContext,
   ): Promise<boolean>{
-    const request: Request = context.switchToHttp().getRequest() //convierte el contexto en un contexto HTTP para acceder a los detalles de la solicitud
+    const request: Request = context.switchToHttp().getRequest() 
     const token = this.extractTokenFromHeader(request)
 
     if(!token){
@@ -22,8 +22,8 @@ export class AuthGuard implements CanActivate {
     }
 
     try{
-      const payload = await this.jwtService.verifyAsync(token, {//verificamos que el token sea valido, la libreria lo hace internamente
-        secret: this.configService.get<string>('JWT_SECRET') //obtenemos la contraseña que creamos para aue el servicio puedavalidar
+      const payload = await this.jwtService.verifyAsync(token, {
+        secret: this.configService.get<string>('JWT_SECRET') 
       });
       
       request['user'] = payload
